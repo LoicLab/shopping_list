@@ -1,8 +1,12 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shopping_list/model/item_list.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../model/item.dart';
+
+/// Client database
 class DatabaseClient {
 
   Database? _database;
@@ -12,24 +16,25 @@ class DatabaseClient {
     return await createDatabase();
   }
 
+  /// Creation database
   Future<Database> createDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     final path = join(directory.path, 'database.db');
     return await openDatabase(
         path,
         version: 1,
-        onCreate: onCreate
+        onCreate: _onCreate
     );
   }
 
-  onCreate(Database database, int version) async {
+  _onCreate(Database database, int version) async {
     //Table list
     await database.execute('''
-    CREATE TABLE lists (
+    CREATE TABLE list (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NULL,
-    creation_date TEXT NULL,
+    creation_date TEXT NOT NULL,
     archiving_date TEXT NULL,
     total_price REAL DEFAULT 0
     )
@@ -37,13 +42,12 @@ class DatabaseClient {
 
     //Table item
     await database.execute('''
-    CREATE TABLE items (
+    CREATE TABLE item (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL NULL,
     shop TEXT NULL,
-    image TEXT,
-    creation_date TEXT NULL,
+    creation_date TEXT NOT NULL,
     archiving_date TEXT NULL,
     status INTEGER NOT NULL DEFAULT 0
     )
@@ -51,33 +55,70 @@ class DatabaseClient {
 
     //Table jonction
     await database.execute('''
-    CREATE TABLE list_items (
+    CREATE TABLE list_item (
     list_id INTEGER NOT NULL,
     item_id INTEGER NOT NULL,
     PRIMARY KEY (list_id, item_id),
-    FOREIGN KEY (list_id) REFERENCES lists (id),
-    FOREIGN KEY (item_id) REFERENCES items (id)
+    FOREIGN KEY (list_id) REFERENCES list (id),
+    FOREIGN KEY (item_id) REFERENCES item (id)
     )
     ''');
   }
 
-  Future<bool> addList(String name, String description) async {
+  /// Add a list with items if any
+  Future<int> addList({required ItemList itemList}) async {
+    Database db = await database;
+    final int id = await db.insert(
+      'list',
+      {
+        'title': itemList.title,
+        'description': itemList.description,
+        'creation_date' : _convertDatetimeToString(itemList.creationDate),
+        'archiving_date' : (itemList.archivingDate == null)? null : _convertDatetimeToString(itemList.archivingDate!),
+        'total_price' : itemList.totalPrice
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    if(itemList.items != []){
+      List<int> itemListId = [];
+      for (var item in itemList.items!){
+        itemListId.add(_addItem(item: item) as int);
+      }
+      for (var itemId in itemListId ){
+        _associateListWithItem(id, itemId);
+      }
+    }
+    return id;
+  }
+  ///Add item
+  Future<int> _addItem({required Item item}) async {
+    Database db = await database;
+    final int id = await db.insert(
+        'item',
+        {
+          'name': item.name,
+          'price': item.price,
+          'shop' : item.shop,
+          'creation_date' : _convertDatetimeToString(item.creationDate),
+          'archiving_date' : (item.archivingDate == null)? null : _convertDatetimeToString(item.archivingDate!),
+          'status' : item.status
+        }
+    );
+    return id;
+  }
+  ///Associates items with lists because a list can have items and an item can be in several lists
+  Future<bool> _associateListWithItem(int listId, int itemId) async {
     Database db = await database;
     await db.insert(
-      'lists',
-      {'name': name, 'description': description},
+      'list_item',
+      {'list_id': listId, 'item_id': itemId},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return true;
+  }
+  ///Convert Datetime to ISO 8601
+  String _convertDatetimeToString(DateTime date) {
+    return date.toUtc().toIso8601String();
   }
 
-  Future<bool> associateListWithItem(int listId, int articleId) async {
-    Database db = await database;
-    await db.insert(
-      'list_articles',
-      {'list_id': listId, 'article_id': articleId},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return true;
-  }
 }
