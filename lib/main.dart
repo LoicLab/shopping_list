@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'controller/home_controller.dart';
+import 'package:shopping_list/screens/adaptive_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: materialTheme,
       darkTheme: materialDarkTheme,
-      home: HomeController(
-        platform: platform,
-        titleBar: title
+      home: AdaptiveScreen(
+          platform: platform,
+          titleBar: title
       )
     );
   }
@@ -61,9 +61,9 @@ class MyApp extends StatelessWidget {
       theme: CupertinoThemeData(
         primaryColor: materialTheme.primaryColor
       ),
-      home: HomeController(
-        platform: platform,
-        titleBar: title
+      home: AdaptiveScreen(
+          platform: platform,
+          titleBar: title
       )
     );
   }

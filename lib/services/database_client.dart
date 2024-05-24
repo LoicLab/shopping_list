@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shopping_list/model/item_list.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/item.dart';
+import '../models/item.dart';
+import '../models/item_list.dart';
 
 /// Client database
 class DatabaseClient {

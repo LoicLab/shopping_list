@@ -1,4 +1,4 @@
-import 'package:shopping_list/model/core.dart';
+import 'core.dart';
 
 ///Item
 class Item extends Core {
