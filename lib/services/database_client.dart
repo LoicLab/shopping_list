@@ -79,7 +79,7 @@ class DatabaseClient {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    if(itemList.items != []){
+    if(itemList.items != null){
       List<int> itemListId = [];
       for (var item in itemList.items!){
         itemListId.add(_addItem(item: item) as int);
@@ -105,6 +105,19 @@ class DatabaseClient {
         }
     );
     return id;
+  }
+  ///Get lists
+  Future<List<ItemList>> getAllLists() async {
+    Database db = await database;
+
+    final result = await db.rawQuery('''
+      SELECT list.*
+      FROM list
+      LEFT JOIN list_item ON list.id = list_item.list_id
+      LEFT JOIN item ON list_item.item_id = item.id
+    ''');
+
+    return result.map((map) => ItemList.fromMap(map)).toList();
   }
   ///Associates items with lists because a list can have items and an item can be in several lists
   Future<bool> _associateListWithItem(int listId, int itemId) async {
