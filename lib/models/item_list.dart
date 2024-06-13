@@ -9,19 +9,28 @@ class ItemList extends Core {
   @override
   late DateTime creationDate;
 
-  late int id;
+  late int? id;
   late String title;
-  String? description;
+  String description;
   double totalPrice =0;
   List<Item>? items;
 
   ItemList({
-    required this.id,
+    this.id,
     required this.title,
-    this.description,
+    required this.description,
     required this.creationDate,
     this.archivingDate,
     required this.totalPrice,
     this.items
   });
+
+  ItemList.fromMap(Map<String, dynamic> map):
+        id = map["id"],
+        title = map["title"],
+        description = map["description"],
+        totalPrice = map["total_price"],
+        //items = map["items"],
+        creationDate = DateTime.tryParse(map["creation_date"])!;
+        //archivingDate = map["archiving_date"];
 }
