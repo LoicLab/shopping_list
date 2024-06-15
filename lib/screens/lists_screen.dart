@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/screens/list_screen.dart';
+import 'package:shopping_list/screens/add_list_screen.dart';
+import 'package:shopping_list/screens/modify_list_screen.dart';
 
 import '../providers/list_provider.dart';
 
 class ListsScreen extends StatelessWidget {
   final TargetPlatform platform;
-  final titleBar = 'Listes de courses';
+  final titleBar = 'Mes listes';
   const ListsScreen({super.key, required this.platform});
 
   bool isAndroid() => (platform == TargetPlatform.android);
@@ -21,7 +22,8 @@ class ListsScreen extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx){
-                  return ListScreen(platform: platform,titleBar: "Ajout d'une liste");
+                  //return ListScreen(platform: platform,titleBar: "Ajout d'une liste");
+                  return AddListScreen(platform: platform, titleBar: "Ajout d'une liste");
                 })
             );
           },
@@ -38,7 +40,7 @@ class ListsScreen extends StatelessWidget {
   }
 
   Widget body({required BuildContext context}){
-    ///Consumer for notify that the list of list it's changed
+    //Consumer for notify that the list of list it's changed
     return Consumer<ListProvider>(
       builder: (context, listProvider, child) => Stack(
         children: [
@@ -46,9 +48,20 @@ class ListsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final list = listProvider.lists[index];
                 return ListTile(
-                    title: Text(list.title,style: const TextStyle(color: Colors.white),)
+                    title: Text(list.title),
+                    subtitle: Text(list.description,style: const TextStyle(fontSize: 12),maxLines: 1),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    textColor: Theme.of(context).colorScheme.secondary,
+                    iconColor: Theme.of(context).colorScheme.secondary,
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext ctx){
+                            return ModifyListScreen(platform: platform, titleBar: titleBar, listId: list.id!);
+                          })
+                      );
+                    }
                 );
-                },
+              },
               separatorBuilder: ((context, index) => const Divider()),
               itemCount: listProvider.lists.length
           )

@@ -1,42 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/providers/list_provider.dart';
 
-class ListScreen extends StatelessWidget {
-  final TargetPlatform platform;
-  final String titleBar;
+import '../providers/list_provider.dart';
 
-  const ListScreen({super.key, required this.platform, required this.titleBar});
+class ListForm extends StatelessWidget {
+  final ElevatedButton submitButton;
+  const ListForm({super.key, required this.submitButton});
 
   @override
   Widget build(BuildContext context) {
-    return scaffold(context);
-  }
-
-  bool isAndroid() => (platform == TargetPlatform.android);
-
-  Widget scaffold(BuildContext context) {
-    return (isAndroid())
-        ? Scaffold(
-        appBar: AppBar(title: Text(titleBar), backgroundColor: Theme.of(context).colorScheme.primary),
-        body: body(context: context)
-    )
-        : CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-            middle: Text(titleBar),
-            backgroundColor: Theme.of(context).colorScheme.primary
-        ),
-        child: body(context: context)
-    );
-  }
-
-  void dispose(){
-
-  }
-
-  Widget body({required BuildContext context}){
-
     return Card(
       margin: const EdgeInsets.all(8),
       color: Colors.black45,
@@ -70,10 +42,10 @@ class ListScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: TextField(
                     //controller: context.watch<ToDoProvider>().controller,
-                    decoration: const InputDecoration(hintText: "Ajouter"),
+                    decoration: InputDecoration(hintText: "Ajouter"),
                   ),
 
                 ),
@@ -107,17 +79,10 @@ class ListScreen extends StatelessWidget {
                 )
             ),
             /*   ),*/
-            ElevatedButton(
-                onPressed: (){
-                  context.read<ListProvider>().add();
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Créér')
-            )
+            submitButton
           ],
         ),
       ),
     );
   }
-
 }

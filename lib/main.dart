@@ -8,7 +8,7 @@ void main() {
   runApp(
       MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_)=>ListProvider()),
+            ChangeNotifierProvider(create: (_)=>ListProvider())
           ],
           child: MyApp()
       )

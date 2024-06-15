@@ -106,6 +106,30 @@ class DatabaseClient {
     );
     return id;
   }
+  ///Update fields list
+  Future<void> updateListById({required ItemList itemList})  async {
+    Database db = await database;
+    final int numberChange = await db.update(
+        'list',
+        {
+          'title': itemList.title,
+          'description': itemList.description,
+          'total_price' : itemList.totalPrice
+        },
+        where: 'id = ?',
+        whereArgs: [itemList.id]
+    );
+  }
+  ///Get list by id
+  Future<ItemList> getListById({required int listId}) async {
+    Database db = await database;
+    List<Map<String, dynamic>> mapList = await db.query(
+        'list',
+        where: 'id = ?',
+        whereArgs: [listId]
+    );
+    return mapList.map((map) => ItemList.fromMap(map)).toList().first;
+  }
   ///Get lists
   Future<List<ItemList>> getAllLists() async {
     Database db = await database;
