@@ -7,7 +7,7 @@ class ItemList extends Core {
   DateTime? archivingDate;
 
   @override
-  late DateTime creationDate;
+  DateTime? creationDate;
 
   late int? id;
   late String title;
@@ -19,7 +19,7 @@ class ItemList extends Core {
     this.id,
     required this.title,
     required this.description,
-    required this.creationDate,
+    this.creationDate,
     this.archivingDate,
     required this.totalPrice,
     this.items

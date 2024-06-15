@@ -25,35 +25,34 @@ class ListProvider with ChangeNotifier {
     descriptionController.text = "";
     totalPriceController.text = "";
   }
-  /*remove(ItemList itemList){
-    //_itemList.remove(itemList);
-    notifyListeners();
-  }*/
   ///Add lit in database and refresh all lists
   add(){
-    DatabaseClient().addList(
-        itemList: ItemList(
-            title: titleController.text,
-            description: descriptionController.text,
-            creationDate: DateTime.now(),
-            totalPrice: double.tryParse(totalPriceController.text) ?? 00.00
-        )
-    );
+    DatabaseClient().addList( itemList: ItemList(
+        title: titleController.text,
+        description: descriptionController.text,
+        creationDate: DateTime.now(),
+        totalPrice: double.tryParse(totalPriceController.text) ?? 00.00
+    ));
     getAll();
     notifyListeners();
   }
   ///Update list fields
-  update({required int listId}){
-    DatabaseClient().updateListById(
-        itemList: ItemList(
-            id: listId,
-            title: titleController.text,
-            description: descriptionController.text,
-            creationDate: DateTime.now(),
-            totalPrice: double.tryParse(totalPriceController.text) ?? 00.00
-        )
+  update({required int listId, required int index }){
+    ItemList list = ItemList(
+        id: listId,
+        title: titleController.text,
+        description: descriptionController.text,
+        totalPrice: double.tryParse(totalPriceController.text) ?? 00.00
     );
-    getAll();
+    DatabaseClient().updateListById(itemList: list);
+    //Replaces the list with the updated list
+    lists[index] = list;
+    notifyListeners();
+  }
+  ///Remove list
+  remove({required int listId, required int index}){
+    DatabaseClient().removeListById(listId: listId);
+    lists.removeAt(index);
     notifyListeners();
   }
   ///Get list by id

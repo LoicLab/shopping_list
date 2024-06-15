@@ -9,12 +9,14 @@ class ModifyListScreen extends StatelessWidget {
   final TargetPlatform platform;
   final String titleBar;
   final int listId;
+  final int index;
 
   const ModifyListScreen({
     super.key,
     required this.platform,
     required this.titleBar,
-    required this.listId
+    required this.listId,
+    required this.index
   });
 
   bool isAndroid() => (platform == TargetPlatform.android);
@@ -38,7 +40,7 @@ class ModifyListScreen extends StatelessWidget {
     return ListForm(
         submitButton: ElevatedButton(
             onPressed: (){
-              context.read<ListProvider>().update(listId: listId);
+              context.read<ListProvider>().update(listId: listId,index: index);
               Navigator.of(context).pop();
             },
             child: const Text('Modifier')
