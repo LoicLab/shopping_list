@@ -8,6 +8,8 @@ class ListProvider with ChangeNotifier {
   ///All list
   late List<ItemList> lists = [];
 
+  late ItemList list;
+
   ///Construct for get the all lists
   ListProvider(){
     getAll();
@@ -17,6 +19,12 @@ class ListProvider with ChangeNotifier {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController totalPriceController = TextEditingController();
 
+  ///Resets TextEditingController properties
+  void resetTextEditingController(){
+    titleController.text = "";
+    descriptionController.text = "";
+    totalPriceController.text = "";
+  }
   /*remove(ItemList itemList){
     //_itemList.remove(itemList);
     notifyListeners();
@@ -32,6 +40,28 @@ class ListProvider with ChangeNotifier {
         )
     );
     getAll();
+    notifyListeners();
+  }
+  ///Update list fields
+  update({required int listId}){
+    DatabaseClient().updateListById(
+        itemList: ItemList(
+            id: listId,
+            title: titleController.text,
+            description: descriptionController.text,
+            creationDate: DateTime.now(),
+            totalPrice: double.tryParse(totalPriceController.text) ?? 00.00
+        )
+    );
+    getAll();
+    notifyListeners();
+  }
+  ///Get list by id
+  Future<void> getListById({required int listId}) async {
+    list = await DatabaseClient().getListById(listId: listId);
+    titleController.text = list.title;
+    descriptionController.text = list.description;
+    totalPriceController.text = list.totalPrice.toString();
     notifyListeners();
   }
   ///Get all lists
