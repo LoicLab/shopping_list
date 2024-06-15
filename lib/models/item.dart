@@ -6,7 +6,7 @@ class Item extends Core {
   DateTime? archivingDate;
 
   @override
-  late DateTime creationDate;
+  late DateTime? creationDate;
 
   late int id;
   late String name;

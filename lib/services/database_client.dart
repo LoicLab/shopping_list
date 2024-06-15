@@ -34,7 +34,7 @@ class DatabaseClient {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NULL,
-    creation_date TEXT NOT NULL,
+    creation_date TEXT NULL,
     archiving_date TEXT NULL,
     total_price REAL DEFAULT 0
     )
@@ -47,7 +47,7 @@ class DatabaseClient {
     name TEXT NOT NULL,
     price REAL NULL,
     shop TEXT NULL,
-    creation_date TEXT NOT NULL,
+    creation_date TEXT NULL,
     archiving_date TEXT NULL,
     status INTEGER NOT NULL DEFAULT 0
     )
@@ -73,7 +73,7 @@ class DatabaseClient {
       {
         'title': itemList.title,
         'description': itemList.description,
-        'creation_date' : _convertDatetimeToString(itemList.creationDate),
+        'creation_date' : (itemList.creationDate == null)? null : _convertDatetimeToString(itemList.creationDate!),
         'archiving_date' : (itemList.archivingDate == null)? null : _convertDatetimeToString(itemList.archivingDate!),
         'total_price' : itemList.totalPrice
       },
@@ -99,12 +99,21 @@ class DatabaseClient {
           'name': item.name,
           'price': item.price,
           'shop' : item.shop,
-          'creation_date' : _convertDatetimeToString(item.creationDate),
+          'creation_date' : (item.creationDate == null)? null : _convertDatetimeToString(item.creationDate!),
           'archiving_date' : (item.archivingDate == null)? null : _convertDatetimeToString(item.archivingDate!),
           'status' : item.status
         }
     );
     return id;
+  }
+  ///Remove list
+  Future<void> removeListById({required int listId}) async {
+    Database db = await database;
+    await db.delete(
+      'list',
+      where: 'id = ?',
+      whereArgs: [listId]
+    );
   }
   ///Update fields list
   Future<void> updateListById({required ItemList itemList})  async {
