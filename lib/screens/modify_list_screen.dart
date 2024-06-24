@@ -44,7 +44,8 @@ class ModifyListScreen extends StatelessWidget {
               Navigator.of(context).pop();
             },
             child: const Text('Modifier')
-        )
+        ),
+        index: index,
     );
   }
 

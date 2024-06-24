@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_list_screen.dart';
 import 'package:shopping_list/screens/modify_list_screen.dart';
+import 'package:shopping_list/widgets/custom_dismissible.dart';
+import 'package:shopping_list/widgets/custom_list_tile.dart';
 
 import '../providers/list_provider.dart';
 
@@ -22,8 +24,7 @@ class ListsScreen extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx){
-                  //return ListScreen(platform: platform,titleBar: "Ajout d'une liste");
-                  return AddListScreen(platform: platform, titleBar: "Ajout d'une liste");
+                  return AddListScreen(platform: platform, titleBar: "Ajouter une liste");
                 })
             );
           },
@@ -47,40 +48,21 @@ class ListsScreen extends StatelessWidget {
           ListView.separated(
               itemBuilder: (context, index) {
                 final list = listProvider.lists[index];
-                return Dismissible(
-                    key: Key(list.id.toString()),
-                    direction: DismissDirection.startToEnd,
+                return CustomDismissible(
+                    listId: list.id!,
                     onDismissed: (direction){
                       context.read<ListProvider>().remove(listId: list.id!, index: index);
                     },
-                    background: Container(
-                      padding: const EdgeInsets.only(right: 8),
-                      color: Colors.redAccent,
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(Icons.delete,size: 30)
-                        ],
-                      ),
-                    ),
-                    child: ListTile(
-                      title: Text(list.title),
-                      subtitle: Text(list.description,style: const TextStyle(fontSize: 12),maxLines: 1),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      textColor: Theme.of(context).colorScheme.secondary,
-                      iconColor: Theme.of(context).colorScheme.secondary,
-                      onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext ctx){
-                              return ModifyListScreen(
-                                  platform: platform,
-                                  titleBar: titleBar,
-                                  listId: list.id!,
-                                  index: index
-                              );
-                            })
-                        );
-                      },
+                    customListTile: CustomListTile(
+                        title: list.title,
+                        subtitle: list.description,
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        screen: ModifyListScreen(
+                            platform: platform,
+                            titleBar: list.title,
+                            listId: list.id!,
+                            index: index
+                        )
                     )
                 );
               },
