@@ -8,7 +8,7 @@ class Item extends Core {
   @override
   late DateTime? creationDate;
 
-  late int id;
+  late int? id;
   late String name;
   double? price;
   String? shop;
@@ -16,7 +16,7 @@ class Item extends Core {
   late int itemListId;
 
   Item({
-    required this.id,
+    this.id,
     required this.name,
     this.price,
     this.shop,
@@ -31,8 +31,8 @@ class Item extends Core {
         name = map["name"],
         price = map["price"],
         shop = map["shop"],
-        status = map["status"],
-        creationDate = map["creation_date"],
-        archivingDate = map["archiving_date"];
+        status = map["status"] == 0 ? false : true,
+        creationDate = DateTime.tryParse(map["creation_date"]);
+        //archivingDate = map["archiving_date"];
 
 }

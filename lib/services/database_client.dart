@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -137,18 +138,40 @@ class DatabaseClient {
         where: 'id = ?',
         whereArgs: [listId]
     );
-    return mapList.map((map) => ItemList.fromMap(map)).toList().first;
+
+    List<Item> itemList = await _getItemsByListId(listId: listId);
+    ItemList list = mapList.map((map) => ItemList.fromMap(map)).toList().first;
+
+    for(var i=0; i<itemList.length;i++){
+      list.addItem(item: itemList[i]);
+    }
+
+    return list;
+  }
+
+  Future<List<Item>> _getItemsByListId({required int listId}) async{
+    Database db = await database;
+    List<Map<String, Object?>> items = await db.rawQuery('''
+      SELECT item.* 
+      FROM item 
+      LEFT JOIN list_item ON item.id = list_item.item_id 
+      WHERE list_id=?               
+    ''',
+    [listId]
+    );
+    List<Item> itemList = [];
+    for (var i = 0;i < items.length; i++){
+      itemList.add(
+          items.map((map) => Item.fromMap(map)).toList()[i]
+      );
+    }
+    return itemList;
   }
   ///Get lists
   Future<List<ItemList>> getAllLists() async {
     Database db = await database;
 
-    final result = await db.rawQuery('''
-      SELECT list.*
-      FROM list
-      LEFT JOIN list_item ON list.id = list_item.list_id
-      LEFT JOIN item ON list_item.item_id = item.id
-    ''');
+    final result = await db.query('list');
 
     return result.map((map) => ItemList.fromMap(map)).toList();
   }
@@ -161,6 +184,25 @@ class DatabaseClient {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return true;
+  }
+  ///Add item in the list
+  Future<bool> addItemToList({required Item item}) async {
+    final int itemId = await _addItem(item: item);
+    return _associateListWithItem(item.itemListId, itemId);
+  }
+  ///Remove item
+  Future<void> removeItemById({required int itemId}) async{
+    Database db = await database;
+    await db.delete(
+        'item',
+        where: 'id = ?',
+        whereArgs: [itemId]
+    );
+    await db.delete(
+        'list_item',
+        where: 'item_id = ?',
+        whereArgs: [itemId]
+    );
   }
   ///Convert Datetime to ISO 8601
   String _convertDatetimeToString(DateTime date) {

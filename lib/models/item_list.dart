@@ -24,6 +24,16 @@ class ItemList extends Core {
     required this.totalPrice,
     this.items
   });
+  ///Add item to list
+  addItem({required Item item}){
+      items ??= [];
+      items?.add(item);
+  }
+  ///Remove item to list
+  removeItem({required Item item}){
+    if(items == null) return;
+    items?.remove(item);
+  }
 
   ItemList.fromMap(Map<String, dynamic> map):
         id = map["id"],
