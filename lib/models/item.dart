@@ -26,13 +26,14 @@ class Item extends Core {
     required this.itemListId
   });
 
-  Item.fromMap(Map<String, dynamic> map):
+  Item.fromMap(Map<String, dynamic> map, int listId):
         id = map["id"],
         name = map["name"],
         price = map["price"],
         shop = map["shop"],
         status = map["status"] == 0 ? false : true,
-        creationDate = DateTime.tryParse(map["creation_date"]);
+        creationDate = DateTime.tryParse(map["creation_date"]),
+        itemListId = listId;
         //archivingDate = map["archiving_date"];
 
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_list_screen.dart';
+import 'package:shopping_list/screens/list_screen.dart';
 import 'package:shopping_list/screens/modify_list_screen.dart';
 import 'package:shopping_list/widgets/custom_dismissible.dart';
 import 'package:shopping_list/widgets/custom_list_tile.dart';
@@ -56,17 +57,31 @@ class ListsScreen extends StatelessWidget {
                     customListTile: CustomListTile(
                         title: list.title,
                         subtitle: list.description,
+                        leading: IconButton(
+                            icon: const Icon(Icons.edit_note),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (BuildContext ctx){
+                                    return ModifyListScreen(
+                                        platform: platform,
+                                        titleBar: list.title,
+                                        listId: list.id!,
+                                        index: index
+                                    );
+                                  })
+                              );
+                            }
+                        ),
                         trailing: const Icon(Icons.arrow_forward_ios),
-                        screen: ModifyListScreen(
-                            platform: platform,
-                            titleBar: list.title,
+                        screen: ListScreen(
                             listId: list.id!,
-                            index: index
+                            platform: platform,
+                            titleBar: list.title
                         )
                     )
                 );
               },
-              separatorBuilder: ((context, index) => const Divider()),
+              separatorBuilder: ((context, index) => const Divider(color: Colors.white,)),
               itemCount: listProvider.lists.length
           )
         ],

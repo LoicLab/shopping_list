@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomListTile extends StatelessWidget {
   final String title;
   final String? subtitle;
+  final Widget? leading;
   final Widget? trailing;
   final Widget? screen;
 
@@ -10,6 +11,7 @@ class CustomListTile extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
+    this.leading,
     this.trailing,
     this.screen
   });
@@ -19,6 +21,7 @@ class CustomListTile extends StatelessWidget {
     return ListTile(
       title: Text(title),
       subtitle: (subtitle != null)?Text(subtitle!,style: const TextStyle(fontSize: 12),maxLines: 1):null,
+      leading: leading,
       trailing: trailing,
       textColor: Theme.of(context).colorScheme.secondary,
       iconColor: Theme.of(context).colorScheme.secondary,
