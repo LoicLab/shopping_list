@@ -85,7 +85,7 @@ class ListForm extends StatelessWidget {
                               customListTile: CustomListTile(title: item.name)
                           );
                         },
-                        separatorBuilder: ((context, index) => const Divider()),
+                        separatorBuilder: ((context, index) => const Divider(color: Colors.white)),
                         itemCount: listProvider.items.length
                     )
 

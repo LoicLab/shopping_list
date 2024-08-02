@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/providers/list_provider.dart';
 import 'package:shopping_list/screens/lists_screen.dart';
+import 'package:shopping_list/providers/items_provider.dart';
 
 void main() {
   runApp(
       MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_)=>ListProvider())
+            ChangeNotifierProvider(create: (_)=>ListProvider()),
+            ChangeNotifierProvider(create: (_)=>ItemsProvider())
           ],
           child: MyApp()
       )

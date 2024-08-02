@@ -130,6 +130,23 @@ class DatabaseClient {
         whereArgs: [itemList.id]
     );
   }
+  ///Update item
+  Future<void> updateItem({required Item item}) async {
+    Database db = await database;
+    final int numberChange = await db.update(
+        'item',
+        {
+          'name': item.name,
+          'price': item.price,
+          'shop' : item.shop,
+          'creation_date' : (item.creationDate == null)? null : _convertDatetimeToString(item.creationDate!),
+          'archiving_date' : (item.archivingDate == null)? null : _convertDatetimeToString(item.archivingDate!),
+          'status' : item.status
+        },
+        where: 'id = ?',
+        whereArgs: [item.id]
+    );
+  }
   ///Get list by id
   Future<ItemList> getListById({required int listId}) async {
     Database db = await database;
@@ -139,7 +156,7 @@ class DatabaseClient {
         whereArgs: [listId]
     );
 
-    List<Item> itemList = await _getItemsByListId(listId: listId);
+    List<Item> itemList = await getItemsByListId(listId: listId);
     ItemList list = mapList.map((map) => ItemList.fromMap(map)).toList().first;
 
     for(var i=0; i<itemList.length;i++){
@@ -149,7 +166,7 @@ class DatabaseClient {
     return list;
   }
 
-  Future<List<Item>> _getItemsByListId({required int listId}) async{
+  Future<List<Item>> getItemsByListId({required int listId}) async{
     Database db = await database;
     List<Map<String, Object?>> items = await db.rawQuery('''
       SELECT item.* 
@@ -162,7 +179,7 @@ class DatabaseClient {
     List<Item> itemList = [];
     for (var i = 0;i < items.length; i++){
       itemList.add(
-          items.map((map) => Item.fromMap(map)).toList()[i]
+          items.map((map) => Item.fromMap(map,listId)).toList()[i]
       );
     }
     return itemList;
