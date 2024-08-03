@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/models/item.dart';
-import 'package:shopping_list/models/item_list.dart';
 
 import '../services/database_client.dart';
 
@@ -17,6 +16,14 @@ class ItemsProvider with ChangeNotifier {
     item.status = !item.status;
     //Update database
     DatabaseClient().updateItem(item: items[index]);
+    notifyListeners();
+  }
+
+  ///Remove item
+  removeItem({required int index}){
+    DatabaseClient().removeItemById(itemId: items[index].id!);
+    //Current list remove item
+    items.removeAt(index);
     notifyListeners();
   }
 

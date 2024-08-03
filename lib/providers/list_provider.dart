@@ -19,14 +19,13 @@ class ListProvider with ChangeNotifier {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController totalPriceController = TextEditingController();
-  TextEditingController itemNameController = TextEditingController();
-  TextEditingController itemPriceController = TextEditingController();
 
   ///Resets TextEditingController properties
-  void resetTextEditingController(){
+  void resetList(){
     titleController.text = "";
     descriptionController.text = "";
     totalPriceController.text = "";
+    items = [];
   }
   ///Add lit in database and refresh all lists
   add(){
@@ -58,25 +57,12 @@ class ListProvider with ChangeNotifier {
     lists.removeAt(index);
     notifyListeners();
   }
-  ///Remove item
-  removeItem({required Item item}){
-    DatabaseClient().removeItemById(itemId: item.id!);
-    //Current list remove item
-    list.removeItem(item: item);
-    //All lists remove item if exist
-    for(list in lists){
-      list.removeItem(item: item);
-    }
-    notifyListeners();
-  }
   ///Get list by id
   Future<void> getListById({required int listId}) async {
     list = await DatabaseClient().getListById(listId: listId);
     titleController.text = list.title;
     descriptionController.text = list.description;
     totalPriceController.text = list.totalPrice.toString();
-    itemNameController.text = "";
-    itemPriceController.text = "";
     _initList(itemList: list);
     notifyListeners();
   }
@@ -85,18 +71,7 @@ class ListProvider with ChangeNotifier {
     lists = await DatabaseClient().getAllLists();
     notifyListeners();
   }
-  ///Ad item to list
-  addItemToList({required int index}){
-    DatabaseClient().addItemToList(item: Item(
-        name: itemNameController.text,
-        price: double.tryParse(itemPriceController.text),
-        status: false,
-        creationDate: DateTime.now(),
-        itemListId: lists[index].id!
-    ));
-    getListById(listId: list.id!);
-    notifyListeners();
-  }
+
   ///Update list and items properties
   _initList({required ItemList itemList}){
     list = itemList;

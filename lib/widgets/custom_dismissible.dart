@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_list/widgets/custom_list_tile.dart';
 
 class CustomDismissible extends StatelessWidget {
 
-  final int listId;
+  final String dismissibleKey;
   final Function(DismissDirection)? onDismissed;
-  final CustomListTile customListTile;
+  final Widget listTile;
 
 
   const CustomDismissible({
     super.key,
-    required this.listId,
+    required this.dismissibleKey,
     required this.onDismissed,
-    required this.customListTile
+    required this.listTile
   });
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-        key: Key(listId.toString()),
+        key: Key(dismissibleKey),
         direction: DismissDirection.startToEnd,
         onDismissed: onDismissed,
         background: Container(
@@ -31,7 +30,7 @@ class CustomDismissible extends StatelessWidget {
             ],
           ),
         ),
-        child: customListTile
+        child: listTile
     );
   }
 
