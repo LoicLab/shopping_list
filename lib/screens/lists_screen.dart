@@ -19,13 +19,16 @@ class ListsScreen extends StatelessWidget {
   Widget scaffold(BuildContext context) {
     return (isAndroid())
         ? Scaffold(
-        appBar: AppBar(title: Text(titleBar), backgroundColor: Theme.of(context).colorScheme.primary),
+        appBar: AppBar(
+            title: Text(titleBar, style: const TextStyle(color: Colors.white)),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
         body: body(context: context),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx){
-                  return AddListScreen(platform: platform, titleBar: "Ajouter une liste");
+                  return AddListScreen(platform: platform, titleBar: "Nouvelle liste");
                 })
             );
           },
@@ -50,11 +53,11 @@ class ListsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final list = listProvider.lists[index];
                 return CustomDismissible(
-                    listId: list.id!,
+                    dismissibleKey: list.id!.toString(),
                     onDismissed: (direction){
                       context.read<ListProvider>().remove(listId: list.id!, index: index);
                     },
-                    customListTile: CustomListTile(
+                    listTile: CustomListTile(
                         title: list.title,
                         subtitle: list.description,
                         leading: IconButton(

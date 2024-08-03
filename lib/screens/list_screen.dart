@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_list/screens/add_item_screen.dart';
 
 import '../providers/items_provider.dart';
+import '../widgets/custom_dismissible.dart';
 
 class ListScreen extends StatelessWidget {
   final TargetPlatform platform;
@@ -21,7 +23,22 @@ class ListScreen extends StatelessWidget {
   Widget scaffold(BuildContext context) {
     return (isAndroid())
         ? Scaffold(
-        appBar: AppBar(title: Text(titleBar), backgroundColor: Theme.of(context).colorScheme.primary),
+        appBar: AppBar(
+            title: Text(titleBar, style: const TextStyle(color: Colors.white)),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (BuildContext ctx){
+                        return AddItemScreen(platform: platform, listId: listId);
+                      })
+                  );
+                },
+              )
+            ],
+        ),
         body: body(context: context)
     )
         : CupertinoPageScaffold(
@@ -41,7 +58,7 @@ class ListScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-                'Aucun article dans cette liste.',
+                'Ajouter des articles dans votre liste.',
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSecondary,
                     fontSize: 20
@@ -57,20 +74,25 @@ class ListScreen extends StatelessWidget {
             ListView.separated(
               separatorBuilder: ((context, index) => const Divider(color: Colors.white,)),
               itemBuilder: (context, index) {
-                return CheckboxListTile(
-                    title: Text(
-                        itemsProvider.items[index].name,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary
+                return CustomDismissible(
+                    dismissibleKey: itemsProvider.items[index].id!.toString(),
+                    onDismissed: (direction){
+                      context.read<ItemsProvider>().removeItem(index: index);
+                    },
+                    listTile: CheckboxListTile(
+                        title: Text(
+                            itemsProvider.items[index].name,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary
+                            )
+                        ),
+                        value: itemsProvider.items[index].status,
+                        onChanged: (_) => itemsProvider.updateItemStatus(index: index),
+                        side: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                            width: 15
                         )
-                    ),
-                    value: itemsProvider.items[index].status,
-                    onChanged: (_) => itemsProvider.updateItemStatus(index: index),
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.secondary,
-                        width: 15
-                    ),
-
+                    )
                 );
               },
               itemCount: itemsProvider.items.length,
