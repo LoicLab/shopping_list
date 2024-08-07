@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_item_screen.dart';
+import 'package:shopping_list/widgets/custom_scaffold.dart';
 
 import '../providers/items_provider.dart';
 import '../widgets/custom_dismissible.dart';
@@ -18,39 +19,36 @@ class ListScreen extends StatelessWidget {
     required this.titleBar
   });
 
-  bool isAndroid() => (platform == TargetPlatform.android);
-
-  Widget scaffold(BuildContext context) {
-    return (isAndroid())
-        ? Scaffold(
+  @override
+  Widget build(BuildContext context){
+    return CustomScaffold(
         appBar: AppBar(
-            title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.add, color: Colors.white),
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (BuildContext ctx){
-                        return AddItemScreen(platform: platform, listId: listId);
-                      })
-                  );
-                },
-              )
-            ],
+          title: Text(titleBar, style: const TextStyle(color: Colors.white)),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (BuildContext ctx){
+                      return AddItemScreen(platform: platform, listId: listId);
+                    })
+                );
+              },
+            )
+          ],
         ),
-        body: body(context: context)
-    )
-        : CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+        cupertinoNavigationBar: CupertinoNavigationBar(
             middle: Text(titleBar),
             backgroundColor: Theme.of(context).colorScheme.primary
         ),
-        child: body(context: context)
+        body: body(context: context),
+        platform: platform
     );
   }
-
+  
   Widget body({required BuildContext context}){
+    context.read<ItemsProvider>().getItemsByListId(listId: listId);
     if(context.watch<ItemsProvider>().items.isEmpty ){
       return Container(
         alignment: Alignment.center,
@@ -101,11 +99,4 @@ class ListScreen extends StatelessWidget {
         )
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    context.read<ItemsProvider>().getItemsByListId(listId: listId);
-    return scaffold(context);
-  }
-
 }

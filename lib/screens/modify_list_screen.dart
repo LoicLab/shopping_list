@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/widgets/button_bottom.dart';
+import 'package:shopping_list/widgets/custom_scaffold.dart';
 import 'package:shopping_list/widgets/list_form.dart';
 
 import '../providers/list_provider.dart';
@@ -20,29 +21,25 @@ class ModifyListScreen extends StatelessWidget {
     required this.index
   });
 
-  bool isAndroid() => (platform == TargetPlatform.android);
-
-  Widget scaffold(BuildContext context) {
-    return (isAndroid())
-        ? Scaffold(
+  Widget build(BuildContext context){
+    return CustomScaffold(
         appBar: AppBar(
             title: Text(titleBar, style: const TextStyle(color: Colors.white)),
             backgroundColor: Theme.of(context).colorScheme.primary
         ),
-        body: body(context: context)
-    )
-        : CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+        cupertinoNavigationBar: CupertinoNavigationBar(
             middle: Text(titleBar),
             backgroundColor: Theme.of(context).colorScheme.primary
         ),
-        child: body(context: context)
+        body: body(context: context),
+        platform: platform
     );
   }
 
   Widget body({required BuildContext context}){
+    context.read<ListProvider>().getListById(listId: listId);
     return ListForm(
-        submitButton: ButtonBottom(
+      submitButton: ButtonBottom(
           elevatedButton: ElevatedButton(
               onPressed: (){
                 context.read<ListProvider>().update(listId: listId,index: index);
@@ -50,15 +47,9 @@ class ModifyListScreen extends StatelessWidget {
               },
               child: const Text('Modifier')
           )
-        ),
-        index: index,
+      ),
+      index: index,
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    context.read<ListProvider>().getListById(listId: listId);
-    return scaffold(context);
   }
 
 }
