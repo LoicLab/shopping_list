@@ -6,6 +6,7 @@ import 'package:shopping_list/screens/list_screen.dart';
 import 'package:shopping_list/screens/modify_list_screen.dart';
 import 'package:shopping_list/widgets/custom_dismissible.dart';
 import 'package:shopping_list/widgets/custom_list_tile.dart';
+import 'package:shopping_list/widgets/custom_scaffold.dart';
 
 import '../providers/list_provider.dart';
 
@@ -14,16 +15,18 @@ class ListsScreen extends StatelessWidget {
   final titleBar = 'Mes listes';
   const ListsScreen({super.key, required this.platform});
 
-  bool isAndroid() => (platform == TargetPlatform.android);
-
-  Widget scaffold(BuildContext context) {
-    return (isAndroid())
-        ? Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    return CustomScaffold(
         appBar: AppBar(
-            title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-            backgroundColor: Theme.of(context).colorScheme.primary,
+          title: Text(titleBar, style: const TextStyle(color: Colors.white)),
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
-        body: body(context: context),
+        platform: platform,
+        cupertinoNavigationBar: CupertinoNavigationBar(
+            middle: Text(titleBar),
+            backgroundColor: Theme.of(context).colorScheme.primary
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).push(
@@ -33,18 +36,12 @@ class ListsScreen extends StatelessWidget {
             );
           },
           child: const Icon(Icons.add),
-        )
-    )
-        : CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-            middle: Text(titleBar),
-            backgroundColor: Theme.of(context).colorScheme.primary
         ),
-        child: body(context: context)
+        body: body()
     );
   }
 
-  Widget body({required BuildContext context}){
+  Widget body(){
     //Consumer for notify that the list of list it's changed
     return Consumer<ListProvider>(
       builder: (context, listProvider, child) => Stack(
@@ -91,10 +88,4 @@ class ListsScreen extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return scaffold(context);
-  }
-
 }

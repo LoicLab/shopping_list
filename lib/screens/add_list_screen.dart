@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/providers/list_provider.dart';
 import 'package:shopping_list/widgets/button_bottom.dart';
+import 'package:shopping_list/widgets/custom_scaffold.dart';
 import 'package:shopping_list/widgets/list_form.dart';
 
 class AddListScreen extends StatelessWidget {
@@ -15,44 +16,35 @@ class AddListScreen extends StatelessWidget {
     required this.titleBar
   });
 
-  bool isAndroid() => (platform == TargetPlatform.android);
-
-  Widget scaffold(BuildContext context) {
-    return (isAndroid())
-        ? Scaffold(
+  @override
+  Widget build(BuildContext context){
+    return CustomScaffold(
         appBar: AppBar(
             title: Text(titleBar, style: const TextStyle(color: Colors.white)),
             backgroundColor: Theme.of(context).colorScheme.primary
         ),
-        body: body(context: context)
-    )
-        : CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+        cupertinoNavigationBar: CupertinoNavigationBar(
             middle: Text(titleBar),
             backgroundColor: Theme.of(context).colorScheme.primary
         ),
-        child: body(context: context)
+        body: body(context: context),
+        platform: platform
     );
   }
 
   Widget body({required BuildContext context}){
+    context.read<ListProvider>().resetList();
     return ListForm(
         submitButton: ButtonBottom(
-          elevatedButton: ElevatedButton(
-              onPressed: (){
-                context.read<ListProvider>().add();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Créer')
-          )
+            elevatedButton: ElevatedButton(
+                onPressed: (){
+                  context.read<ListProvider>().add();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Créer')
+            )
         )
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    context.read<ListProvider>().resetList();
-    return scaffold(context);
   }
 
 }
