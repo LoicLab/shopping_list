@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/services/item_repository.dart';
 
 import '../models/item.dart';
-import '../services/database_client.dart';
 
 class ItemProvider with ChangeNotifier {
 
@@ -11,7 +11,7 @@ class ItemProvider with ChangeNotifier {
 
   ///Ad item to list
   addItemToList({required int listId}){
-    DatabaseClient().addItemToList(item: Item(
+    ItemRepository().addItemToList(item: Item(
         name: nameController.text,
         price: double.tryParse(priceController.text),
         shop: shopController.text,

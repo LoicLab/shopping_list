@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/models/item.dart';
 import 'package:shopping_list/models/item_list.dart';
-
-import '../services/database_client.dart';
+import 'package:shopping_list/services/list_repository.dart';
 
 class ListProvider with ChangeNotifier {
 
@@ -29,7 +28,7 @@ class ListProvider with ChangeNotifier {
   }
   ///Add lit in database and refresh all lists
   add(){
-    DatabaseClient().addList( itemList: ItemList(
+    ListRepository().addList( itemList: ItemList(
         title: titleController.text,
         description: descriptionController.text,
         creationDate: DateTime.now(),
@@ -46,20 +45,20 @@ class ListProvider with ChangeNotifier {
         description: descriptionController.text,
         totalPrice: double.tryParse(totalPriceController.text) ?? 00.00
     );
-    DatabaseClient().updateListById(itemList: list);
+    ListRepository().updateListById(itemList: list);
     //Replaces the list with the updated list
     lists[index] = list;
     notifyListeners();
   }
   ///Remove list
   remove({required int listId, required int index}){
-    DatabaseClient().removeListById(listId: listId);
+    ListRepository().removeListById(listId: listId);
     lists.removeAt(index);
     notifyListeners();
   }
   ///Get list by id
   Future<void> getListById({required int listId}) async {
-    list = await DatabaseClient().getListById(listId: listId);
+    list = await ListRepository().getListById(listId: listId);
     titleController.text = list.title;
     descriptionController.text = list.description;
     totalPriceController.text = list.totalPrice.toString();
@@ -68,7 +67,7 @@ class ListProvider with ChangeNotifier {
   }
   ///Get all lists
   Future<void> getAll() async {
-    lists = await DatabaseClient().getAllLists();
+    lists = await ListRepository().getAllLists();
     notifyListeners();
   }
 
