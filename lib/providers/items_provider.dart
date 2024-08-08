@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/models/item.dart';
-
-import '../services/database_client.dart';
+import 'package:shopping_list/services/item_repository.dart';
+import 'package:shopping_list/services/list_repository.dart';
 
 ///Items provider
 class ItemsProvider with ChangeNotifier {
@@ -15,20 +15,20 @@ class ItemsProvider with ChangeNotifier {
     Item item = items[index];
     item.status = !item.status;
     //Update database
-    DatabaseClient().updateItem(item: items[index]);
+    ItemRepository().updateItem(item: items[index]);
     notifyListeners();
   }
 
   ///Remove item
   removeItem({required int index}){
-    DatabaseClient().removeItemById(itemId: items[index].id!);
+    ItemRepository().removeItemById(itemId: items[index].id!);
     //Current list remove item
     items.removeAt(index);
     notifyListeners();
   }
 
   Future<void> getItemsByListId({required int listId}) async {
-    items = await DatabaseClient().getItemsByListId(listId: listId);
+    items = await ListRepository().getItemsByListId(listId: listId);
     notifyListeners();
   }
 

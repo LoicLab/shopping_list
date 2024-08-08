@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/item.dart';
-import '../models/item_list.dart';
 
 /// Client database
-class DatabaseClient {
+abstract class DatabaseClient {
 
   Database? _database;
 
@@ -66,33 +66,14 @@ class DatabaseClient {
     ''');
   }
 
-  /// Add a list with items if any
-  Future<int> addList({required ItemList itemList}) async {
-    Database db = await database;
-    final int id = await db.insert(
-      'list',
-      {
-        'title': itemList.title,
-        'description': itemList.description,
-        'creation_date' : (itemList.creationDate == null)? null : _convertDatetimeToString(itemList.creationDate!),
-        'archiving_date' : (itemList.archivingDate == null)? null : _convertDatetimeToString(itemList.archivingDate!),
-        'total_price' : itemList.totalPrice
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    if(itemList.items != null){
-      List<int> itemListId = [];
-      for (var item in itemList.items!){
-        itemListId.add(_addItem(item: item) as int);
-      }
-      for (var itemId in itemListId ){
-        _associateListWithItem(id, itemId);
-      }
-    }
-    return id;
+  @protected
+  ///Convert Datetime to ISO 8601
+  String convertDatetimeToString(DateTime date) {
+    return date.toUtc().toIso8601String();
   }
+  @protected
   ///Add item
-  Future<int> _addItem({required Item item}) async {
+  Future<int> addItem({required Item item}) async {
     Database db = await database;
     final int id = await db.insert(
         'item',
@@ -100,72 +81,13 @@ class DatabaseClient {
           'name': item.name,
           'price': item.price,
           'shop' : item.shop,
-          'creation_date' : (item.creationDate == null)? null : _convertDatetimeToString(item.creationDate!),
-          'archiving_date' : (item.archivingDate == null)? null : _convertDatetimeToString(item.archivingDate!),
+          'creation_date' : (item.creationDate == null)? null : convertDatetimeToString(item.creationDate!),
+          'archiving_date' : (item.archivingDate == null)? null : convertDatetimeToString(item.archivingDate!),
           'status' : item.status
         }
     );
     return id;
   }
-  ///Remove list
-  Future<void> removeListById({required int listId}) async {
-    Database db = await database;
-    await db.delete(
-      'list',
-      where: 'id = ?',
-      whereArgs: [listId]
-    );
-  }
-  ///Update fields list
-  Future<void> updateListById({required ItemList itemList})  async {
-    Database db = await database;
-    final int numberChange = await db.update(
-        'list',
-        {
-          'title': itemList.title,
-          'description': itemList.description,
-          'total_price' : itemList.totalPrice
-        },
-        where: 'id = ?',
-        whereArgs: [itemList.id]
-    );
-  }
-  ///Update item
-  Future<void> updateItem({required Item item}) async {
-    Database db = await database;
-    final int numberChange = await db.update(
-        'item',
-        {
-          'name': item.name,
-          'price': item.price,
-          'shop' : item.shop,
-          'creation_date' : (item.creationDate == null)? null : _convertDatetimeToString(item.creationDate!),
-          'archiving_date' : (item.archivingDate == null)? null : _convertDatetimeToString(item.archivingDate!),
-          'status' : item.status
-        },
-        where: 'id = ?',
-        whereArgs: [item.id]
-    );
-  }
-  ///Get list by id
-  Future<ItemList> getListById({required int listId}) async {
-    Database db = await database;
-    List<Map<String, dynamic>> mapList = await db.query(
-        'list',
-        where: 'id = ?',
-        whereArgs: [listId]
-    );
-
-    List<Item> itemList = await getItemsByListId(listId: listId);
-    ItemList list = mapList.map((map) => ItemList.fromMap(map)).toList().first;
-
-    for(var i=0; i<itemList.length;i++){
-      list.addItem(item: itemList[i]);
-    }
-
-    return list;
-  }
-
   Future<List<Item>> getItemsByListId({required int listId}) async{
     Database db = await database;
     List<Map<String, Object?>> items = await db.rawQuery('''
@@ -174,7 +96,7 @@ class DatabaseClient {
       LEFT JOIN list_item ON item.id = list_item.item_id 
       WHERE list_id=?               
     ''',
-    [listId]
+        [listId]
     );
     List<Item> itemList = [];
     for (var i = 0;i < items.length; i++){
@@ -184,16 +106,10 @@ class DatabaseClient {
     }
     return itemList;
   }
-  ///Get lists
-  Future<List<ItemList>> getAllLists() async {
-    Database db = await database;
 
-    final result = await db.query('list');
-
-    return result.map((map) => ItemList.fromMap(map)).toList();
-  }
+  @protected
   ///Associates items with lists because a list can have items and an item can be in several lists
-  Future<bool> _associateListWithItem(int listId, int itemId) async {
+  Future<bool> associateListWithItem(int listId, int itemId) async {
     Database db = await database;
     await db.insert(
       'list_item',
@@ -202,28 +118,4 @@ class DatabaseClient {
     );
     return true;
   }
-  ///Add item in the list
-  Future<bool> addItemToList({required Item item}) async {
-    final int itemId = await _addItem(item: item);
-    return _associateListWithItem(item.itemListId, itemId);
-  }
-  ///Remove item
-  Future<void> removeItemById({required int itemId}) async{
-    Database db = await database;
-    await db.delete(
-        'item',
-        where: 'id = ?',
-        whereArgs: [itemId]
-    );
-    await db.delete(
-        'list_item',
-        where: 'item_id = ?',
-        whereArgs: [itemId]
-    );
-  }
-  ///Convert Datetime to ISO 8601
-  String _convertDatetimeToString(DateTime date) {
-    return date.toUtc().toIso8601String();
-  }
-
 }
