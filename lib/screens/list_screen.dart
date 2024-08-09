@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_item_screen.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
 
+import '../models/item.dart';
 import '../providers/items_provider.dart';
 import '../widgets/custom_dismissible.dart';
 
@@ -46,7 +47,7 @@ class ListScreen extends StatelessWidget {
         platform: platform
     );
   }
-  
+
   Widget body({required BuildContext context}){
     context.read<ItemsProvider>().getItemsByListId(listId: listId);
     if(context.watch<ItemsProvider>().items.isEmpty ){
@@ -84,6 +85,10 @@ class ListScreen extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.secondary
                             )
                         ),
+                        subtitle: Text(
+                            getSubtitleTile(item: itemsProvider.items[index]),
+                            style: TextStyle(color: Theme.of(context).colorScheme.secondary)
+                        ),
                         value: itemsProvider.items[index].status,
                         onChanged: (_) => itemsProvider.updateItemStatus(index: index),
                         side: BorderSide(
@@ -98,5 +103,18 @@ class ListScreen extends StatelessWidget {
           ],
         )
     );
+  }
+
+  String getSubtitleTile({required Item item}){
+    String subtitleTile = "";
+    if(item.price != null){ subtitleTile = item.getPriceToString(); }
+    if(item.shop != null){
+      if(subtitleTile.isEmpty == false){
+        subtitleTile += ' ${ ' / ${item.shop!}'}';
+      }else{
+        subtitleTile = item.shop!;
+      }
+    }
+    return subtitleTile;
   }
 }

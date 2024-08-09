@@ -26,6 +26,11 @@ class Item extends Core {
     required this.itemListId
   });
 
+  ///Return price to string with the €
+  String getPriceToString(){
+    return '$price €';
+  }
+
   Item.fromMap(Map<String, dynamic> map, int listId):
         id = map["id"],
         name = map["name"],
