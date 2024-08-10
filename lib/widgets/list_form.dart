@@ -7,11 +7,9 @@ import '../providers/list_provider.dart';
 
 class ListForm extends StatelessWidget {
   final ButtonBottom submitButton;
-  final int? index;
   const ListForm({
     super.key,
     required this.submitButton,
-    this.index
   });
 
   @override

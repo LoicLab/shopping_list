@@ -21,6 +21,22 @@ class ItemProvider with ChangeNotifier {
     ));
     notifyListeners();
   }
+
+  updateItemToList({required Item item}){
+    item.name = nameController.text;
+    item.price = double.tryParse(priceController.text);
+    item.shop = shopController.text;
+    ItemRepository().updateItem(item: item);
+    notifyListeners();
+  }
+
+  Future<void> getItemById({required int itemId}) async {
+    Item item = await ItemRepository().getItemById(itemId: itemId);
+    nameController.text = item.name;
+    priceController.text = item.price!.toString();
+    shopController.text = item.shop!;
+  }
+
   ///Reset all fields of Item
   resetItem(){
     nameController.text = "";

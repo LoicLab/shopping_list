@@ -6,6 +6,7 @@ import 'package:shopping_list/widgets/button_bottom.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
 import 'package:shopping_list/widgets/list_form.dart';
 
+///Screen for add list
 class AddListScreen extends StatelessWidget {
   final TargetPlatform platform;
   final String titleBar;
