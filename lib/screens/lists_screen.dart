@@ -10,6 +10,7 @@ import 'package:shopping_list/widgets/custom_scaffold.dart';
 
 import '../providers/list_provider.dart';
 
+///Screen for display all list
 class ListsScreen extends StatelessWidget {
   final TargetPlatform platform;
   final titleBar = 'Mes listes';

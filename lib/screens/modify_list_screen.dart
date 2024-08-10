@@ -7,6 +7,7 @@ import 'package:shopping_list/widgets/list_form.dart';
 
 import '../providers/list_provider.dart';
 
+///Screen for modify a list
 class ModifyListScreen extends StatelessWidget {
   final TargetPlatform platform;
   final String titleBar;
@@ -21,6 +22,7 @@ class ModifyListScreen extends StatelessWidget {
     required this.index
   });
 
+  @override
   Widget build(BuildContext context){
     return CustomScaffold(
         appBar: AppBar(
@@ -47,8 +49,7 @@ class ModifyListScreen extends StatelessWidget {
               },
               child: const Text('Modifier')
           )
-      ),
-      index: index,
+      )
     );
   }
 

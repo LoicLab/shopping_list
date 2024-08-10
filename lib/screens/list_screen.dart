@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_item_screen.dart';
+import 'package:shopping_list/screens/modify_item_screen.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
 
 import '../models/item.dart';
 import '../providers/items_provider.dart';
 import '../widgets/custom_dismissible.dart';
 
+///Screen for display a list
 class ListScreen extends StatelessWidget {
   final TargetPlatform platform;
   final String titleBar;
@@ -79,6 +81,22 @@ class ListScreen extends StatelessWidget {
                       context.read<ItemsProvider>().removeItem(index: index);
                     },
                     listTile: CheckboxListTile(
+                        secondary: IconButton(
+                            icon: Icon(
+                                Icons.edit_note,
+                                color: Theme.of(context).colorScheme.secondary
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (BuildContext ctx){
+                                    return ModifyItemScreen(
+                                        item: itemsProvider.items[index],
+                                        platform: platform
+                                    );
+                                  })
+                              );
+                            }
+                        ),
                         title: Text(
                             itemsProvider.items[index].name,
                             style: TextStyle(

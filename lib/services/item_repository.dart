@@ -43,4 +43,29 @@ class ItemRepository extends DatabaseClient {
         whereArgs: [itemId]
     );
   }
+  ///Get item by id
+  Future<Item> getItemById({required int itemId}) async {
+    Database db = await database;
+    List<Map<String, dynamic>> mapList = await db.query(
+        'item',
+        where: 'id = ?',
+        whereArgs: [itemId]
+    );
+
+    int listId = await _getListIdByItemId(itemId: itemId);
+    Item item = mapList.map((map) => Item.fromMap(map, listId)).toList().first;
+
+    return item;
+  }
+
+  ///Get the list id of the element
+  Future<int> _getListIdByItemId({required itemId}) async {
+    Database db = await database;
+    List<Map<String, dynamic>> mapList = await db.query(
+      'list_item',
+      where: 'item_id = ?',
+      whereArgs: [itemId]
+    );
+    return mapList[0]['list_id'];
+  }
 }
