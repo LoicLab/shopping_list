@@ -11,6 +11,7 @@ class ItemProvider with ChangeNotifier {
 
   ///Ad item to list
   addItemToList({required int listId}){
+    _checkPrice();
     ItemRepository().addItemToList(item: Item(
         name: nameController.text,
         price: double.tryParse(priceController.text),
@@ -22,7 +23,9 @@ class ItemProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ///Update item to list
   updateItemToList({required Item item}){
+    _checkPrice();
     item.name = nameController.text;
     item.price = double.tryParse(priceController.text);
     item.shop = shopController.text;
@@ -30,6 +33,7 @@ class ItemProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ///Get item for init fields form
   Future<void> getItemById({required int itemId}) async {
     Item item = await ItemRepository().getItemById(itemId: itemId);
     nameController.text = item.name;
@@ -42,5 +46,11 @@ class ItemProvider with ChangeNotifier {
     nameController.text = "";
     priceController.text = "";
     shopController.text = "";
+  }
+  ///Replace comma to dot for text price
+  _checkPrice(){
+    if(priceController.text.isNotEmpty){
+      priceController.text = priceController.text.replaceAll(',', '.');
+    }
   }
 }
