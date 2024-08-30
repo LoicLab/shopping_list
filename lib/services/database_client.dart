@@ -11,6 +11,7 @@ import '../models/item.dart';
 abstract class DatabaseClient {
 
   Database? _database;
+  static const _databaseVersion = 2;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -23,8 +24,9 @@ abstract class DatabaseClient {
     final path = join(directory.path, 'database.db');
     return await openDatabase(
         path,
-        version: 1,
-        onCreate: _onCreate
+        version: _databaseVersion,
+        onCreate: _onCreate,
+        onUpgrade: _onUpgrade
     );
   }
 
@@ -48,6 +50,7 @@ abstract class DatabaseClient {
     name TEXT NOT NULL,
     price REAL NULL,
     shop TEXT NULL,
+    quantity INTEGER NULL DEFAULT 0,
     creation_date TEXT NULL,
     archiving_date TEXT NULL,
     status INTEGER NOT NULL DEFAULT 0
@@ -66,6 +69,12 @@ abstract class DatabaseClient {
     ''');
   }
 
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE item ADD COLUMN quantity INTEGER NULL DEFAULT 0,');
+    }
+  }
+
   @protected
   ///Convert Datetime to ISO 8601
   String convertDatetimeToString(DateTime date) {
@@ -81,6 +90,7 @@ abstract class DatabaseClient {
           'name': item.name,
           'price': item.price,
           'shop' : item.shop,
+          'quantity' : item.quantity,
           'creation_date' : (item.creationDate == null)? null : convertDatetimeToString(item.creationDate!),
           'archiving_date' : (item.archivingDate == null)? null : convertDatetimeToString(item.archivingDate!),
           'status' : item.status

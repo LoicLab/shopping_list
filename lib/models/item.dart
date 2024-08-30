@@ -14,6 +14,7 @@ class Item extends Core {
   String? shop;
   late bool status;
   late int itemListId;
+  int? quantity;
 
   Item({
     this.id,
@@ -23,7 +24,8 @@ class Item extends Core {
     required this.status,
     required this.creationDate,
     this.archivingDate,
-    required this.itemListId
+    required this.itemListId,
+    this.quantity
   });
 
   ///Return price to string with the €
@@ -38,6 +40,7 @@ class Item extends Core {
         shop = map["shop"],
         status = map["status"] == 0 ? false : true,
         creationDate = DateTime.tryParse(map["creation_date"]),
+        quantity = map["quantity"],
         itemListId = listId;
         //archivingDate = map["archiving_date"];
 

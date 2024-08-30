@@ -98,7 +98,7 @@ class ListScreen extends StatelessWidget {
                             }
                         ),
                         title: Text(
-                            itemsProvider.items[index].name,
+                            getTitleTile(item: itemsProvider.items[index]),
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary
                             )
@@ -121,6 +121,12 @@ class ListScreen extends StatelessWidget {
           ],
         )
     );
+  }
+  ///Get title with quantity or not
+  String getTitleTile({required Item item}){
+    return (item.quantity == null)
+        ?item.name
+        :'${item.name} x ${item.quantity}';
   }
 
   String getSubtitleTile({required Item item}){

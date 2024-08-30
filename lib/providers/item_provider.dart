@@ -8,6 +8,7 @@ class ItemProvider with ChangeNotifier {
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController shopController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
 
   ///Ad item to list
   addItemToList({required int listId}){
@@ -17,6 +18,7 @@ class ItemProvider with ChangeNotifier {
         price: double.tryParse(priceController.text),
         shop: shopController.text,
         status: false,
+        quantity: int.tryParse(quantityController.text),
         creationDate: DateTime.now(),
         itemListId: listId
     ));
@@ -29,6 +31,7 @@ class ItemProvider with ChangeNotifier {
     item.name = nameController.text;
     item.price = double.tryParse(priceController.text);
     item.shop = shopController.text;
+    item.quantity = int.tryParse(quantityController.text);
     ItemRepository().updateItem(item: item);
     notifyListeners();
   }
@@ -39,6 +42,7 @@ class ItemProvider with ChangeNotifier {
     nameController.text = item.name;
     priceController.text = item.price!.toString();
     shopController.text = item.shop!;
+    quantityController.text = item.quantity!.toString();
   }
 
   ///Reset all fields of Item
@@ -46,6 +50,7 @@ class ItemProvider with ChangeNotifier {
     nameController.text = "";
     priceController.text = "";
     shopController.text = "";
+    quantityController.text = "";
   }
   ///Replace comma to dot for text price
   _checkPrice(){
