@@ -42,6 +42,14 @@ class ItemForm extends StatelessWidget {
                 textInputType: TextInputType.text
             )
         ),
+        Padding(
+            padding: const EdgeInsets.all(8),
+            child: CustomTextField(
+                textEditingController: context.watch<ItemProvider>().quantityController,
+                label: "Quantité",
+                textInputType: TextInputType.number
+            )
+        ),
         submitButton
       ],
     );

@@ -15,6 +15,7 @@ class ItemRepository extends DatabaseClient {
           'name': item.name,
           'price': item.price,
           'shop' : item.shop,
+          'quantity' : item.quantity,
           'creation_date' : (item.creationDate == null)? null : convertDatetimeToString(item.creationDate!),
           'archiving_date' : (item.archivingDate == null)? null : convertDatetimeToString(item.archivingDate!),
           'status' : item.status
