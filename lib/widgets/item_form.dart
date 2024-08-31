@@ -43,11 +43,35 @@ class ItemForm extends StatelessWidget {
             )
         ),
         Padding(
-            padding: const EdgeInsets.all(8),
-            child: CustomTextField(
-                textEditingController: context.watch<ItemProvider>().quantityController,
-                label: "Quantité",
-                textInputType: TextInputType.number
+            padding: const EdgeInsets.only(top: 8,left: 15),
+            child: Consumer<ItemProvider>(
+              builder: (context, itemProvider, child) => Stack(
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        'Quantité',
+                        style: TextStyle(
+                          fontSize: 18
+                        )
+                      ),
+                      itemProvider.quantityController.text == "1"
+                      ? const Padding(padding: EdgeInsets.all(25))
+                      : IconButton(
+                          icon: const Icon(Icons.remove),
+                          onPressed: itemProvider.decrementQuantity
+                      ),
+                      Text(
+                          itemProvider.quantityController.text
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: itemProvider.incrementQuantity
+                      )
+                  ],
+                  )
+                ],
+              )
             )
         ),
         submitButton
