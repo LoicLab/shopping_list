@@ -50,12 +50,28 @@ class ItemProvider with ChangeNotifier {
     nameController.text = "";
     priceController.text = "";
     shopController.text = "";
-    quantityController.text = "";
+    quantityController.text = "1";
   }
   ///Replace comma to dot for text price
   _checkPrice(){
     if(priceController.text.isNotEmpty){
       priceController.text = priceController.text.replaceAll(',', '.');
     }
+  }
+  ///Increment quantity
+  incrementQuantity() {
+    int currentQuantity = int.tryParse(quantityController.text) ?? 1;
+    currentQuantity++;
+    quantityController.text = currentQuantity.toString();
+    notifyListeners();
+  }
+  /// Decrement qunatity
+  decrementQuantity() {
+    int currentQuantity = int.tryParse(quantityController.text) ?? 1;
+    if (currentQuantity > 1) {
+      currentQuantity--;
+    }
+    quantityController.text = currentQuantity.toString();
+    notifyListeners();
   }
 }
