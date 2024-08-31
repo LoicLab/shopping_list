@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_item_screen.dart';
 import 'package:shopping_list/screens/modify_item_screen.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../models/item.dart';
 import '../providers/items_provider.dart';
@@ -15,12 +16,15 @@ class ListScreen extends StatelessWidget {
   final String titleBar;
   final int listId;
 
-  const ListScreen({
+  ListScreen({
     super.key,
     required this.listId,
     required this.platform,
     required this.titleBar
-  });
+  }){
+    // No screen lock
+    WakelockPlus.enable();
+  }
 
   @override
   Widget build(BuildContext context){
