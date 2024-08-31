@@ -37,7 +37,8 @@ class CustomTextField extends StatelessWidget{
         ),
         keyboardType: textInputType,
         maxLines: maxLines,
-        minLines: minLines
+        minLines: minLines,
+        textCapitalization: TextCapitalization.sentences
     );
   }
 }
