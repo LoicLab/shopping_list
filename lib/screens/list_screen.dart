@@ -56,7 +56,7 @@ class ListScreen extends StatelessWidget {
 
   Widget body({required BuildContext context}){
     context.read<ItemsProvider>().getItemsByListId(listId: listId);
-    if(context.watch<ItemsProvider>().items.isEmpty ){
+    if(context.watch<ItemsProvider>().filteredItems.isEmpty ){
       return Container(
         alignment: Alignment.center,
         child: Card(
@@ -73,57 +73,86 @@ class ListScreen extends StatelessWidget {
         ),
       );
     }
-    return Consumer<ItemsProvider>(
-        builder: (context, itemsProvider, child) => Stack(
-          children: [
-            ListView.separated(
-              separatorBuilder: ((context, index) => const Divider(color: Colors.white,)),
-              itemBuilder: (context, index) {
-                return CustomDismissible(
-                    dismissibleKey: itemsProvider.items[index].id!.toString(),
-                    onDismissed: (direction){
-                      context.read<ItemsProvider>().removeItem(index: index);
-                    },
-                    listTile: CheckboxListTile(
-                        secondary: IconButton(
-                            icon: Icon(
-                                Icons.edit_note,
-                                color: Theme.of(context).colorScheme.secondary
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (BuildContext ctx){
-                                    return ModifyItemScreen(
-                                        item: itemsProvider.items[index],
-                                        platform: platform
+    return
+      Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    color: Colors.white,
+                    onPressed: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      context.read<ItemsProvider>().resetSearch();
+                    }
+                ),
+                labelText: 'Rechercher un article',
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (value) => context.read<ItemsProvider>().searchItems(query: value),
+              controller: context.watch<ItemsProvider>().searchValue ,
+            ),
+          ),
+          Expanded(
+              child: Consumer<ItemsProvider>(
+              builder: (context, itemsProvider, child) => Stack(
+                  children: [
+                    ListView.separated(
+                      separatorBuilder: ((context, index) => const Divider(color: Colors.white,)),
+                      itemBuilder: (context, index) {
+                      return CustomDismissible(
+                          dismissibleKey: itemsProvider.filteredItems[index].id!.toString(),
+                          onDismissed: (direction){
+                            context.read<ItemsProvider>().removeItem(index: index);
+                          },
+                          listTile: CheckboxListTile(
+                              secondary: IconButton(
+                                  icon: Icon(
+                                      Icons.edit_note,
+                                      color: Theme.of(context).colorScheme.secondary
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (BuildContext ctx){
+                                          return ModifyItemScreen(
+                                              item: itemsProvider.filteredItems[index],
+                                              platform: platform
+                                          );
+                                        })
                                     );
-                                  })
-                              );
-                            }
-                        ),
-                        title: Text(
-                            getTitleTile(item: itemsProvider.items[index]),
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary
-                            )
-                        ),
-                        subtitle: Text(
-                            getSubtitleTile(item: itemsProvider.items[index]),
-                            style: TextStyle(color: Theme.of(context).colorScheme.secondary)
-                        ),
-                        value: itemsProvider.items[index].status,
-                        onChanged: (_) => itemsProvider.updateItemStatus(index: index),
-                        side: BorderSide(
-                            color: Theme.of(context).colorScheme.secondary,
-                            width: 15
-                        )
-                    )
-                );
-              },
-              itemCount: itemsProvider.items.length,
+                                  }
+                              ),
+                              title: Text(
+                                  getTitleTile(item: itemsProvider.filteredItems[index]),
+                                  style: TextStyle(
+                                      color: Theme.of(context).colorScheme.secondary
+                                  )
+                              ),
+                              subtitle: Text(
+                                  getSubtitleTile(item: itemsProvider.filteredItems[index]),
+                                  style: TextStyle(color: Theme.of(context).colorScheme.secondary)
+                              ),
+                              value: itemsProvider.filteredItems[index].status,
+                              onChanged: (_) {
+                                itemsProvider.updateItemStatus(index: index);
+                              },
+                              side: BorderSide(
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  width: 15
+                              )
+                          )
+                      );
+                    },
+                    itemCount: itemsProvider.filteredItems.length,
+                  )
+                ],
+              )
             )
-          ],
-        )
+          )
+        ]
     );
   }
   ///Get title with quantity or not
