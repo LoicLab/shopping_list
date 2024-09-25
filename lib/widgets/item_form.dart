@@ -55,14 +55,14 @@ class ItemForm extends StatelessWidget {
                           fontSize: 18
                         )
                       ),
-                      itemProvider.quantityController.text == "1"
+                      context.watch<ItemProvider>().quantityController.text == "1"
                       ? const Padding(padding: EdgeInsets.all(25))
                       : IconButton(
                           icon: const Icon(Icons.remove),
                           onPressed: itemProvider.decrementQuantity
                       ),
                       Text(
-                          itemProvider.quantityController.text
+                          context.watch<ItemProvider>().quantityController.text
                       ),
                       IconButton(
                         icon: const Icon(Icons.add),
