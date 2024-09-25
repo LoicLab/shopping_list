@@ -39,10 +39,16 @@ class ItemProvider with ChangeNotifier {
   ///Get item for init fields form
   Future<void> getItemById({required int itemId}) async {
     Item item = await ItemRepository().getItemById(itemId: itemId);
+    resetItem();
     nameController.text = item.name;
-    priceController.text = item.price!.toString();
     shopController.text = item.shop!;
-    quantityController.text = item.quantity!.toString();
+    if(item.price != null ){
+      priceController.text = item.price!.toString();
+    }
+    if(item.quantity != null ){
+      quantityController.text = item.quantity!.toString();
+    }
+    notifyListeners();
   }
 
   ///Reset all fields of Item
