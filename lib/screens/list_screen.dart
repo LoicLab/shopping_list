@@ -77,7 +77,7 @@ class ListScreen extends StatelessWidget {
       Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12),
             child: TextField(
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search, color: Colors.white),
@@ -90,7 +90,12 @@ class ListScreen extends StatelessWidget {
                     }
                 ),
                 labelText: 'Rechercher un article',
+                labelStyle: const TextStyle(color: Colors.white),
                 border: const OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  // width: 0.0 produces a thin "hairline" border
+                  borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 0.0),
+                )
               ),
               onChanged: (value) => context.read<ItemsProvider>().searchItems(query: value),
               controller: context.watch<ItemsProvider>().searchValue ,
