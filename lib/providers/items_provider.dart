@@ -7,13 +7,18 @@ import 'package:shopping_list/services/list_repository.dart';
 ///Items provider
 class ItemsProvider with ChangeNotifier {
   ///Items list
-  late List<Item> items = [];
+  late List<Item> _items = [];
   ///Items list filtered for search
   late List<Item> _filteredItems = [];
   late Item item;
   TextEditingController searchValue = TextEditingController();
 
   List<Item> get filteredItems => _filteredItems.isEmpty ? items : _filteredItems;
+
+  List<Item> get items {
+    _sortItemsByStatus(_items);
+    return _items;
+  }
 
   ///Update status of item
   updateItemStatus({required int index}){
@@ -22,6 +27,7 @@ class ItemsProvider with ChangeNotifier {
     item.status = !item.status;
     //Update database
     ItemRepository().updateItem(item: _filteredItems[index]);
+    _sortItemsByStatus(_filteredItems);
     notifyListeners();
   }
 
@@ -40,7 +46,7 @@ class ItemsProvider with ChangeNotifier {
     if(newItems.length > items.length){
       _filteredItems = newItems;
     }
-    items = newItems;
+    _items = newItems;
     //If change of list reset search
     if(
       _filteredItems.isNotEmpty && _filteredItems.first.itemListId != listId ||
@@ -63,9 +69,15 @@ class ItemsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ///Reset search item list with item list
+  ///Clear search value
   void resetSearch() {
     searchValue.clear();
     _filteredItems = items;
     notifyListeners();
+  }
+  ///Sort item list by status
+  void _sortItemsByStatus(List<Item> itemList){
+    itemList.sort((a, b) => a.status ? 1 : -1);
   }
 }
