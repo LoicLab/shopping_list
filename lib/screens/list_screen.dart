@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_list/screens/add_item_screen.dart';
 import 'package:shopping_list/screens/modify_item_screen.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
+import 'package:shopping_list/widgets/search_text_field.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../models/item.dart';
@@ -76,30 +77,18 @@ class ListScreen extends StatelessWidget {
     return
       Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search, color: Colors.white),
-                suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    color: Colors.white,
-                    onPressed: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      context.read<ItemsProvider>().resetSearch();
-                    }
-                ),
-                labelText: 'Rechercher un article',
-                labelStyle: const TextStyle(color: Colors.white),
-                border: const OutlineInputBorder(),
-                enabledBorder: OutlineInputBorder(
-                  // width: 0.0 produces a thin "hairline" border
-                  borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 0.0),
-                )
+          SearchTextField(
+              searchValue: context.watch<ItemsProvider>().searchValue,
+              suffixIconButton: IconButton(
+                  icon: const Icon(Icons.clear),
+                  color: Colors.white,
+                  onPressed: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    context.read<ItemsProvider>().resetSearch();
+                  }
               ),
-              onChanged: (value) => context.read<ItemsProvider>().searchItems(query: value),
-              controller: context.watch<ItemsProvider>().searchValue ,
-            ),
+              onChangedValue: (value) => context.read<ItemsProvider>().searchItems(query: value),
+              labelText: 'Rechercher un article'
           ),
           Expanded(
               child: Consumer<ItemsProvider>(
