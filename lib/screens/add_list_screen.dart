@@ -21,8 +21,7 @@ class AddListScreen extends StatelessWidget {
   Widget build(BuildContext context){
     return CustomScaffold(
         appBar: AppBar(
-            title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-            backgroundColor: Theme.of(context).colorScheme.primary
+            title: Text(titleBar),
         ),
         cupertinoNavigationBar: CupertinoNavigationBar(
             middle: Text(titleBar),

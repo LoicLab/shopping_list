@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget{
   final TextEditingController textEditingController;
   final String label;
-  final Color textColor;
   final TextInputType textInputType;
   final int? maxLines;
   final int? minLines;
@@ -12,7 +11,6 @@ class CustomTextField extends StatelessWidget{
     super.key,
     required this.textEditingController,
     required this.label,
-    this.textColor = Colors.white,
     required this.textInputType,
     this.maxLines,
     this.minLines
@@ -26,14 +24,7 @@ class CustomTextField extends StatelessWidget{
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
-                borderRadius: BorderRadius.circular(50)
-            ),
-            label: Text(
-                label,
-                style: TextStyle(color: textColor)
-            )
+            label: Text(label)
         ),
         keyboardType: textInputType,
         maxLines: maxLines,
