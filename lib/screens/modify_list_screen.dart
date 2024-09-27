@@ -27,7 +27,6 @@ class ModifyListScreen extends StatelessWidget {
     return CustomScaffold(
         appBar: AppBar(
             title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-            backgroundColor: Theme.of(context).colorScheme.primary
         ),
         cupertinoNavigationBar: CupertinoNavigationBar(
             middle: Text(titleBar),

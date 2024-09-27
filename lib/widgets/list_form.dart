@@ -16,7 +16,6 @@ class ListForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(8),
-      color: Colors.black45,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(

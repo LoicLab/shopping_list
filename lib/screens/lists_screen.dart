@@ -20,8 +20,7 @@ class ListsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
         appBar: AppBar(
-          title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          title: Text(titleBar)
         ),
         platform: platform,
         cupertinoNavigationBar: CupertinoNavigationBar(
@@ -82,7 +81,7 @@ class ListsScreen extends StatelessWidget {
                     )
                 );
               },
-              separatorBuilder: ((context, index) => const Divider(color: Colors.white,)),
+              separatorBuilder: ((context, index) => const Divider()),
               itemCount: listProvider.lists.length
           )
         ],

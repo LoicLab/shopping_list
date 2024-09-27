@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class SearchTextField extends StatelessWidget {
   final TextEditingController searchValue;
   final IconButton suffixIconButton;
+  final Icon prefixIcon;
   final Function(String) onChangedValue;
   final String labelText;
 
@@ -12,7 +13,8 @@ class SearchTextField extends StatelessWidget {
     required this.searchValue,
     required this.suffixIconButton,
     required this.onChangedValue,
-    required this.labelText
+    required this.labelText,
+    required this.prefixIcon
   });
 
   @override
@@ -26,18 +28,12 @@ class SearchTextField extends StatelessWidget {
       ),
     );
   }
-  ///Input decoration for add prefixIcon,  suffixIcon, label and border
+  ///Input decoration for add prefixIcon,  suffixIcon, label
   InputDecoration searchInputDecoration({required BuildContext context}){
     return InputDecoration(
-        prefixIcon: const Icon(Icons.search, color: Colors.white),
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIconButton,
-        labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.white),
-        border: const OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          // width: 0.0 produces a thin "hairline" border
-          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 0.0),
-        )
+        labelText: labelText
     );
   }
 

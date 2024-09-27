@@ -9,7 +9,7 @@ import 'package:shopping_list/widgets/item_form.dart';
 ///Screen for add item to list
 class AddItemScreen extends StatelessWidget {
   final TargetPlatform platform;
-  final String titleBar = "Nouvelle article";
+  final String titleBar = "Nouvel article";
   final int listId;
 
   const AddItemScreen({
@@ -22,8 +22,7 @@ class AddItemScreen extends StatelessWidget {
   Widget build(BuildContext context){
      return CustomScaffold(
          appBar: AppBar(
-             title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-             backgroundColor: Theme.of(context).colorScheme.primary
+             title: Text(titleBar),
          ),
          cupertinoNavigationBar: CupertinoNavigationBar(
              middle: Text(titleBar),

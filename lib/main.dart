@@ -32,18 +32,91 @@ class MyApp extends StatelessWidget {
   }
   ///Defines the light theme
   final ThemeData materialTheme = ThemeData.light().copyWith(
-      colorScheme: const ColorScheme.light(
-          primary: Colors.deepPurple,
-          secondary: Colors.black
+      primaryColor: Colors.deepPurple,
+      appBarTheme: const AppBarTheme(
+          color: Colors.deepPurple,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 22
+          ),
+          actionsIconTheme: IconThemeData(
+              color: Colors.white
+          ),
+          iconTheme: IconThemeData(
+            color: Colors.white, // Couleur de la flèche de retour
+          )
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.deepPurple
+          )
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.deepPurple),
+              borderRadius: BorderRadius.circular(50)
+          ),
+          labelStyle: const TextStyle(
+              color: Colors.black
+          ),
+          hintStyle: const TextStyle(
+              color: Colors.black
+          ),
+          border: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.deepPurple),
+              borderRadius: BorderRadius.circular(50)
+          )
       )
   );
 
   ///Defines the dark theme
   final ThemeData materialDarkTheme = ThemeData.dark().copyWith(
-      colorScheme: const ColorScheme.light(
-          primary: Colors.deepPurple,
-          secondary: Colors.white
-      )
+      primaryColor: Colors.deepPurple,
+      appBarTheme: const AppBarTheme(
+        color: Colors.deepPurple,
+        actionsIconTheme: IconThemeData(
+          color: Colors.white
+        )
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.deepPurple),
+              borderRadius: BorderRadius.circular(50)
+          ),
+          labelStyle: const TextStyle(
+              color: Colors.white
+          ),
+          hintStyle: const TextStyle(
+              color: Colors.white
+          ),
+        border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.deepPurple),
+            borderRadius: BorderRadius.circular(50)
+        )
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.deepPurple
+          )
+      ),
+      checkboxTheme: CheckboxThemeData(
+          side: const BorderSide(
+            color: Colors.white,
+              width: 15
+          ),
+          fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
+              return Colors.deepPurple;
+            }
+            return Colors.white;
+          }),
+      ),
   );
 
   final String title = "Liste de courses";

@@ -31,11 +31,10 @@ class ListScreen extends StatelessWidget {
   Widget build(BuildContext context){
     return CustomScaffold(
         appBar: AppBar(
-          title: Text(titleBar, style: const TextStyle(color: Colors.white)),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          title: Text(titleBar),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: const Icon(Icons.add),
               onPressed: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (BuildContext ctx){
@@ -60,15 +59,12 @@ class ListScreen extends StatelessWidget {
     if(context.watch<ItemsProvider>().filteredItems.isEmpty ){
       return Container(
         alignment: Alignment.center,
-        child: Card(
+        child: const Card(
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
             child: Text(
                 'Ajouter des articles dans votre liste.',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    fontSize: 20
-                )
+                style: TextStyle(fontSize: 20)
             ),
           ),
         ),
@@ -81,14 +77,14 @@ class ListScreen extends StatelessWidget {
               searchValue: context.watch<ItemsProvider>().searchValue,
               suffixIconButton: IconButton(
                   icon: const Icon(Icons.clear),
-                  color: Colors.white,
                   onPressed: () {
                     FocusScope.of(context).requestFocus(FocusNode());
                     context.read<ItemsProvider>().resetSearch();
                   }
               ),
               onChangedValue: (value) => context.read<ItemsProvider>().searchItems(query: value),
-              labelText: 'Rechercher un article'
+              labelText: 'Rechercher un article',
+              prefixIcon: const Icon(Icons.search)
           ),
           Expanded(
               child: Consumer<ItemsProvider>(
@@ -104,10 +100,7 @@ class ListScreen extends StatelessWidget {
                           },
                           listTile: CheckboxListTile(
                               secondary: IconButton(
-                                  icon: Icon(
-                                      Icons.edit_note,
-                                      color: Theme.of(context).colorScheme.secondary
-                                  ),
+                                  icon: const Icon(Icons.edit_note),
                                   onPressed: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (BuildContext ctx){
@@ -120,23 +113,15 @@ class ListScreen extends StatelessWidget {
                                   }
                               ),
                               title: Text(
-                                  getTitleTile(item: itemsProvider.filteredItems[index]),
-                                  style: TextStyle(
-                                      color: Theme.of(context).colorScheme.secondary
-                                  )
+                                  getTitleTile(item: itemsProvider.filteredItems[index])
                               ),
                               subtitle: Text(
-                                  getSubtitleTile(item: itemsProvider.filteredItems[index]),
-                                  style: TextStyle(color: Theme.of(context).colorScheme.secondary)
+                                  getSubtitleTile(item: itemsProvider.filteredItems[index])
                               ),
                               value: itemsProvider.filteredItems[index].status,
                               onChanged: (_) {
                                 itemsProvider.updateItemStatus(index: index);
-                              },
-                              side: BorderSide(
-                                  color: Theme.of(context).colorScheme.secondary,
-                                  width: 15
-                              )
+                              }
                           )
                       );
                     },

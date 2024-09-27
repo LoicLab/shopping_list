@@ -23,8 +23,6 @@ class CustomListTile extends StatelessWidget {
       subtitle: (subtitle != null)?Text(subtitle!,style: const TextStyle(fontSize: 12),maxLines: 1):null,
       leading: leading,
       trailing: trailing,
-      textColor: Theme.of(context).colorScheme.secondary,
-      iconColor: Theme.of(context).colorScheme.secondary,
       onTap: () => onTap(context),
     );
   }
