@@ -5,6 +5,7 @@ import 'package:shopping_list/providers/item_provider.dart';
 import 'package:shopping_list/providers/list_provider.dart';
 import 'package:shopping_list/screens/lists_screen.dart';
 import 'package:shopping_list/providers/items_provider.dart';
+import 'package:shopping_list/themes/material_app_theme.dart';
 
 void main() {
   runApp(
@@ -14,13 +15,13 @@ void main() {
             ChangeNotifierProvider(create: (_)=>ItemsProvider()),
             ChangeNotifierProvider(create: (_)=>ItemProvider())
           ],
-          child: MyApp()
+          child: const MyApp()
       )
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,94 +31,6 @@ class MyApp extends StatelessWidget {
     bool isAndroid = (platform == TargetPlatform.android);
     return isAndroid ? androidBase(platform: platform) : iOSBase(platform: platform);
   }
-  ///Defines the light theme
-  final ThemeData materialTheme = ThemeData.light().copyWith(
-      primaryColor: Colors.deepPurple,
-      appBarTheme: const AppBarTheme(
-          color: Colors.deepPurple,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 22
-          ),
-          actionsIconTheme: IconThemeData(
-              color: Colors.white
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.white, // Couleur de la flèche de retour
-          )
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.deepPurple
-          )
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.deepPurple),
-              borderRadius: BorderRadius.circular(50)
-          ),
-          labelStyle: const TextStyle(
-              color: Colors.black
-          ),
-          hintStyle: const TextStyle(
-              color: Colors.black
-          ),
-          border: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.deepPurple),
-              borderRadius: BorderRadius.circular(50)
-          )
-      )
-  );
-
-  ///Defines the dark theme
-  final ThemeData materialDarkTheme = ThemeData.dark().copyWith(
-      primaryColor: Colors.deepPurple,
-      appBarTheme: const AppBarTheme(
-        color: Colors.deepPurple,
-        actionsIconTheme: IconThemeData(
-          color: Colors.white
-        )
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.deepPurple),
-              borderRadius: BorderRadius.circular(50)
-          ),
-          labelStyle: const TextStyle(
-              color: Colors.white
-          ),
-          hintStyle: const TextStyle(
-              color: Colors.white
-          ),
-        border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.deepPurple),
-            borderRadius: BorderRadius.circular(50)
-        )
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.deepPurple
-          )
-      ),
-      checkboxTheme: CheckboxThemeData(
-          side: const BorderSide(
-            color: Colors.white,
-              width: 15
-          ),
-          fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(WidgetState.selected)) {
-              return Colors.deepPurple;
-            }
-            return Colors.white;
-          }),
-      ),
-  );
 
   final String title = "Liste de courses";
 
@@ -126,8 +39,8 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         title: title,
         debugShowCheckedModeBanner: false,
-        theme: materialTheme,
-        darkTheme: materialDarkTheme,
+        theme: MaterialAppTheme.lightTheme,
+        darkTheme: MaterialAppTheme.darkTheme,
         home: ListsScreen(platform: platform)
     );
   }
@@ -142,7 +55,7 @@ class MyApp extends StatelessWidget {
           DefaultWidgetsLocalizations.delegate
         ],
         theme: CupertinoThemeData(
-            primaryColor: materialTheme.primaryColor
+            primaryColor: MaterialAppTheme.lightTheme.primaryColor
         ),
         home: ListsScreen(platform: platform)
     );
