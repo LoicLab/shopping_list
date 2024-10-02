@@ -24,7 +24,6 @@ class ItemProvider with ChangeNotifier {
     ));
     notifyListeners();
   }
-
   ///Update item to list
   updateItemToList({required Item item}){
     _checkPrice();
@@ -35,7 +34,6 @@ class ItemProvider with ChangeNotifier {
     ItemRepository().updateItem(item: item);
     notifyListeners();
   }
-
   ///Get item for init fields form
   Future<void> getItemById({required int itemId}) async {
     Item item = await ItemRepository().getItemById(itemId: itemId);
@@ -50,7 +48,6 @@ class ItemProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
   ///Reset all fields of Item
   resetItem(){
     nameController.text = "";
@@ -71,7 +68,7 @@ class ItemProvider with ChangeNotifier {
     quantityController.text = currentQuantity.toString();
     notifyListeners();
   }
-  /// Decrement qunatity
+  /// Decrement quantity
   decrementQuantity() {
     int currentQuantity = int.tryParse(quantityController.text) ?? 1;
     if (currentQuantity > 1) {

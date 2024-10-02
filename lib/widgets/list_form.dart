@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_list/widgets/button_bottom.dart';
-import 'package:shopping_list/widgets/custom_text_field.dart';
+import 'package:shopping_list/widgets/custom_text_form_field.dart';
 
 import '../providers/list_provider.dart';
 
@@ -22,7 +22,7 @@ class ListForm extends StatelessWidget {
           children: [
             Padding(
                 padding: const EdgeInsets.all(15),
-                child: CustomTextField(
+                child: CustomTextFormField(
                     textEditingController : context.watch<ListProvider>().titleController,
                     label: "Nom de la liste",
                     textInputType: TextInputType.text
@@ -30,7 +30,7 @@ class ListForm extends StatelessWidget {
             ),
             Padding(
                 padding: const EdgeInsets.all(15),
-                child: CustomTextField(
+                child: CustomTextFormField(
                   textEditingController: context.watch<ListProvider>().descriptionController,
                   label: 'Description',
                   textInputType: TextInputType.multiline,
