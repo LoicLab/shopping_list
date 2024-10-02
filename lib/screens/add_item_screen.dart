@@ -34,13 +34,24 @@ class AddItemScreen extends StatelessWidget {
   }
 
   Widget body({required BuildContext context}){
+    var formKey = GlobalKey<FormState>();
     context.read<ItemProvider>().resetItem();
     return ItemForm(
+        formKey: formKey,
         submitButton: ButtonBottom(
             elevatedButton: ElevatedButton(
               onPressed: (){
-                context.read<ItemProvider>().addItemToList(listId: listId);
-                Navigator.of(context).pop();
+                if (formKey.currentState!.validate()) {
+                  context.read<ItemProvider>().addItemToList(listId: listId);
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Article ajouter'))
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Le formulaire contient des erreurs'))
+                  );
+                }
               },
               child: const Text('Créer'),
             )

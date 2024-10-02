@@ -24,7 +24,7 @@ class ModifyItemScreen extends StatelessWidget {
   Widget build(BuildContext context) {
       return CustomScaffold(
           appBar: AppBar(
-              title: Text(item.name, style: const TextStyle(color: Colors.white)),
+              title: Text(item.name),
           ),
           cupertinoNavigationBar: CupertinoNavigationBar(
               middle: Text(item.name),
@@ -36,13 +36,24 @@ class ModifyItemScreen extends StatelessWidget {
   }
 
   Widget body({required BuildContext context}){
+    var formKey = GlobalKey<FormState>();
     context.read<ItemProvider>().getItemById(itemId: item.id!);
     return ItemForm(
+        formKey: formKey,
         submitButton: ButtonBottom(
             elevatedButton: ElevatedButton(
               onPressed: (){
-                context.read<ItemProvider>().updateItemToList(item: item);
-                Navigator.of(context).pop();
+                if (formKey.currentState!.validate()) {
+                  context.read<ItemProvider>().updateItemToList(item: item);
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Article modifier'))
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Le formulaire contient des erreurs'))
+                  );
+                }
               },
               child: const Text('Modifier'),
             )
