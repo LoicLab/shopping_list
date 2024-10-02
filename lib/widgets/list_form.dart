@@ -7,39 +7,44 @@ import '../providers/list_provider.dart';
 
 class ListForm extends StatelessWidget {
   final ButtonBottom submitButton;
+  final GlobalKey<FormState> formKey;
+
   const ListForm({
     super.key,
     required this.submitButton,
+    required this.formKey
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(15),
-                child: CustomTextFormField(
-                    textEditingController : context.watch<ListProvider>().titleController,
-                    label: "Nom de la liste",
-                    textInputType: TextInputType.text
-                )
-            ),
-            Padding(
-                padding: const EdgeInsets.all(15),
-                child: CustomTextFormField(
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(15),
+              child: CustomTextFormField(
+                  textEditingController: context.watch<ListProvider>().titleController,
+                  label: "Nom de la liste",
+                  textInputType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Ce champ ne peut pas être vide';
+                    }
+                    return null;
+                  })
+          ),
+          Padding(
+              padding: const EdgeInsets.all(15),
+              child: CustomTextFormField(
                   textEditingController: context.watch<ListProvider>().descriptionController,
                   label: 'Description',
                   textInputType: TextInputType.multiline,
                   minLines: 2
               )
-            ),
-            submitButton
-          ],
-        ),
+          ),
+          submitButton
+        ],
       ),
     );
   }
