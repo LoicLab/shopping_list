@@ -33,13 +33,24 @@ class AddListScreen extends StatelessWidget {
   }
 
   Widget body({required BuildContext context}){
+    var formKey = GlobalKey<FormState>();
     context.read<ListProvider>().resetList();
     return ListForm(
+        formKey: formKey,
         submitButton: ButtonBottom(
             elevatedButton: ElevatedButton(
                 onPressed: (){
-                  context.read<ListProvider>().add();
-                  Navigator.of(context).pop();
+                  if (formKey.currentState!.validate()) {
+                    context.read<ListProvider>().add();
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Liste ajouter'))
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Le formulaire contient des erreurs'))
+                    );
+                  }
                 },
                 child: const Text('Créer')
             )

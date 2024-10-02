@@ -33,7 +33,7 @@ class ItemForm extends StatelessWidget {
                       return 'Ce champ ne peut pas être vide';
                     }
                     return null;
-                  },
+                  }
                 )
             ),
             Padding(
