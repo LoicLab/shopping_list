@@ -71,7 +71,7 @@ abstract class DatabaseClient {
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute('ALTER TABLE item ADD COLUMN quantity INTEGER NULL DEFAULT 0,');
+      await db.execute('ALTER TABLE item ADD COLUMN quantity INTEGER NULL DEFAULT 0');
     }
   }
 
