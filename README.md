@@ -4,8 +4,8 @@ Android and IOS application for creating shopping lists.
 ## Main features
 
 ## Prerequisites
-- Flutter 3.22.2 must be installed on your machine. [Link to Flutter documentation for installation](https://flutter.dev/docs/get-started/install)
-- Dart 3.4.3
+- Flutter 3.24.3 must be installed on your machine. [Link to Flutter documentation for installation](https://flutter.dev/docs/get-started/install)
+- Dart 3.5.3
 - Android Studio with the Flutter plugin for development.
 
 ## Installation
