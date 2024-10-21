@@ -47,7 +47,7 @@ class ModifyItemScreen extends StatelessWidget {
                   context.read<ItemProvider>().updateItemToList(item: item);
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Article modifier'))
+                      const SnackBar(content: Text('Article modifié'))
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

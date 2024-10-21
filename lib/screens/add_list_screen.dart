@@ -44,7 +44,7 @@ class AddListScreen extends StatelessWidget {
                     context.read<ListProvider>().add();
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Liste ajouter'))
+                        const SnackBar(content: Text('Liste ajoutée'))
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
