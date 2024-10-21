@@ -22,14 +22,6 @@ dependencies:
   path: ^1.9.0
   provider: ^6.1.2
   wakelock_plus: ^1.2.8
-  flutter_native_splash: ^2.4.1
-
-flutter_native_splash:
-  color: "#ffffff" # Couleur de fond de l'écran de démarrage
-  background_image: "assets/app_icon.png" # Chemin vers l'image pour l'écran de démarrage
-  android: true
-  ios: true
-  web: false
 
 dev_dependencies:
   flutter_test:
@@ -47,5 +39,3 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  assets:
-    - assets/app_icon.png

@@ -47,7 +47,7 @@ class ModifyListScreen extends StatelessWidget {
                     context.read<ListProvider>().update(listId: listId, index: index);
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Liste modifier'))
+                        const SnackBar(content: Text('Liste modifiée'))
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MaterialAppTheme {
 
   ///Main color for app
-  static const _mainColor = Colors.deepPurple;
+  static const _mainColor = Color(0xFFc81c1c);
 
   ///Material light theme
   static ThemeData lightTheme = ThemeData.light().copyWith(
@@ -46,7 +46,23 @@ class MaterialAppTheme {
           border: OutlineInputBorder(
               borderSide: const BorderSide(color: _mainColor),
               borderRadius: BorderRadius.circular(50)
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black),
+            borderRadius: BorderRadius.circular(50),
           )
+      ),
+      checkboxTheme: CheckboxThemeData(
+        side: const BorderSide(
+            color: Colors.black,
+            width: 15
+        ),
+        fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _mainColor;
+          }
+          return Colors.white;
+        }),
       )
   );
 
@@ -54,10 +70,14 @@ class MaterialAppTheme {
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     primaryColor: _mainColor,
     appBarTheme: const AppBarTheme(
-        color: Colors.deepPurple,
+        color: _mainColor,
         actionsIconTheme: IconThemeData(
             color: Colors.white
         )
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: _mainColor,
+        foregroundColor: Colors.white
     ),
     inputDecorationTheme: InputDecorationTheme(
         enabledBorder: OutlineInputBorder(
@@ -73,6 +93,10 @@ class MaterialAppTheme {
         border: OutlineInputBorder(
             borderSide: const BorderSide(color: _mainColor),
             borderRadius: BorderRadius.circular(50)
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(50),
         )
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
