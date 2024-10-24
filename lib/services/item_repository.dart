@@ -69,4 +69,29 @@ class ItemRepository extends DatabaseClient {
     );
     return mapList[0]['list_id'];
   }
+
+  ///Remove all items by list id
+  Future<void> removeAllItemsByListId({required listId}) async {
+    Database db = await database;
+
+    //Select all list_item elements to be deleted
+    List<Map<String, dynamic>> mapList = await db.rawQuery(
+        'Select item_id From list_item Where list_id = ?',
+        [listId]
+    );
+
+    //Create where clause with list elements to be delete
+    String whereClause = 'id IN (${mapList.map((itemId) => '?').join(', ')})';
+
+    //Delete all items in item table
+    await db.rawDelete(
+      'DELETE FROM item WHERE $whereClause',
+      mapList.map((map) => map['item_id'] as int).toList(),
+    );
+    //Delete all item_id from list_id
+    await db.rawDelete(
+      'DELETE FROM list_item WHERE list_id = ?',
+      [listId],
+    );
+  }
 }

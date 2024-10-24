@@ -34,6 +34,35 @@ class ListScreen extends StatelessWidget {
           title: Text(titleBar),
           actions: <Widget>[
             IconButton(
+              icon: const Icon(Icons.delete_forever),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: const Text("Confirmer la suppression"),
+                        content: const Text(
+                            "Êtes-vous sûr de vouloir vider la liste ? Cette action est irréversible."
+                        ),
+                        actions: <Widget> [
+                          ElevatedButton(
+                              onPressed: () {
+                                context.read<ItemsProvider>().emptyList(listId: listId);
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Vider la liste")
+                          ),
+                          ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text("Annuler")
+                          )
+                        ]
+                    );
+                  },
+                );
+              },
+            ),
+            IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
                 Navigator.of(context).push(

@@ -80,4 +80,12 @@ class ItemsProvider with ChangeNotifier {
   void _sortItemsByStatus(List<Item> itemList){
     itemList.sort((a, b) => a.status ? 1 : -1);
   }
+
+  ///Empty the list of items
+  emptyList({required int listId}){
+    ItemRepository().removeAllItemsByListId(listId: listId);
+    //Clear the list
+    _filteredItems.clear();
+    notifyListeners();
+  }
 }
