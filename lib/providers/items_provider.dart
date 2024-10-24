@@ -42,8 +42,8 @@ class ItemsProvider with ChangeNotifier {
   ///Get items by list id
   Future<void> getItemsByListId({required int listId}) async {
     List<Item> newItems = await ListRepository().getItemsByListId(listId: listId);
-    //For add new item and refresh the list
-    if(newItems.length > items.length){
+    //For add new item or items list is empty, refresh the list
+    if(newItems.length > items.length || newItems.isEmpty){
       _filteredItems = newItems;
     }
     _items = newItems;
@@ -79,5 +79,13 @@ class ItemsProvider with ChangeNotifier {
   ///Sort item list by status
   void _sortItemsByStatus(List<Item> itemList){
     itemList.sort((a, b) => a.status ? 1 : -1);
+  }
+
+  ///Empty the list of items
+  emptyList({required int listId}){
+    ItemRepository().removeAllItemsByListId(listId: listId);
+    //Clear the list
+    _filteredItems.clear();
+    notifyListeners();
   }
 }
