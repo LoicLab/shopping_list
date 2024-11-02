@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/providers/item_provider.dart';
 import 'package:shopping_list/providers/list_provider.dart';
+import 'package:shopping_list/providers/tutorial_provider.dart';
 import 'package:shopping_list/screens/lists_screen.dart';
 import 'package:shopping_list/providers/items_provider.dart';
 import 'package:shopping_list/themes/material_app_theme.dart';
@@ -13,7 +13,7 @@ void main() {
           providers: [
             ChangeNotifierProvider(create: (_)=>ListProvider()),
             ChangeNotifierProvider(create: (_)=>ItemsProvider()),
-            ChangeNotifierProvider(create: (_)=>ItemProvider())
+            ChangeNotifierProvider(create: (_)=>TutorialProvider())
           ],
           child: const MyApp()
       )

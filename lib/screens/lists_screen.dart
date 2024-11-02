@@ -7,17 +7,36 @@ import 'package:shopping_list/screens/modify_list_screen.dart';
 import 'package:shopping_list/widgets/custom_dismissible.dart';
 import 'package:shopping_list/widgets/custom_list_tile.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
+import 'package:shopping_list/widgets/custom_target_focus.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../providers/list_provider.dart';
+import '../providers/tutorial_provider.dart';
 
 ///Screen for display all list
 class ListsScreen extends StatelessWidget {
   final TargetPlatform platform;
-  final titleBar = 'Mes listes';
-  const ListsScreen({super.key, required this.platform});
+  final String titleBar = 'Mes listes';
+  final GlobalKey addListButtonKey = GlobalKey();
+  ListsScreen({super.key, required this.platform});
 
   @override
   Widget build(BuildContext context) {
+
+    //Display the tutorial for the first start
+    context.read<TutorialProvider>().initializeTutorial(
+        context,
+        [
+          CustomTargetFocus(
+              ContentAlign.left,
+              "Cliquez ici pour créer une liste.",
+              "Add list button",
+              addListButtonKey
+          ).build(context)
+        ],
+        runtimeType.toString()
+    );
+
     return CustomScaffold(
         appBar: AppBar(
           title: Text(titleBar)
@@ -28,6 +47,7 @@ class ListsScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.primary
         ),
         floatingActionButton: FloatingActionButton(
+          key: addListButtonKey,
           onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (BuildContext ctx){

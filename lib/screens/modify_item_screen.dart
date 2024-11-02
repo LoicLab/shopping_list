@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_list/providers/item_provider.dart';
+import 'package:shopping_list/providers/items_provider.dart';
 import 'package:shopping_list/widgets/custom_scaffold.dart';
 import 'package:shopping_list/widgets/item_form.dart';
 
@@ -37,14 +37,14 @@ class ModifyItemScreen extends StatelessWidget {
 
   Widget body({required BuildContext context}){
     var formKey = GlobalKey<FormState>();
-    context.read<ItemProvider>().getItemById(itemId: item.id!);
+    context.read<ItemsProvider>().getItemById(itemId: item.id!);
     return ItemForm(
         formKey: formKey,
         submitButton: ButtonBottom(
             elevatedButton: ElevatedButton(
               onPressed: (){
                 if (formKey.currentState!.validate()) {
-                  context.read<ItemProvider>().updateItemToList(item: item);
+                  context.read<ItemsProvider>().updateItemToList(item: item);
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Article modifié'))

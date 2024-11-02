@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/item_provider.dart';
+import '../providers/items_provider.dart';
 import 'button_bottom.dart';
 import 'custom_text_form_field.dart';
 
@@ -25,7 +25,7 @@ class ItemForm extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.only(top: 15,left: 8, right: 8, bottom: 8),
                 child: CustomTextFormField(
-                  textEditingController:  context.watch<ItemProvider>().nameController,
+                  textEditingController:  context.watch<ItemsProvider>().nameController,
                   label: "Nom",
                   textInputType: TextInputType.text,
                   validator: (value) {
@@ -39,7 +39,7 @@ class ItemForm extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.all(8),
                 child: CustomTextFormField(
-                    textEditingController: context.watch<ItemProvider>().priceController,
+                    textEditingController: context.watch<ItemsProvider>().priceController,
                     label: "Prix",
                     textInputType: TextInputType.number
                 )
@@ -47,15 +47,15 @@ class ItemForm extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.all(8),
                 child: CustomTextFormField(
-                    textEditingController: context.watch<ItemProvider>().shopController,
+                    textEditingController: context.watch<ItemsProvider>().shopController,
                     label: "Nom du magasin",
                     textInputType: TextInputType.text
                 )
             ),
             Padding(
                 padding: const EdgeInsets.only(top: 8,left: 15),
-                child: Consumer<ItemProvider>(
-                    builder: (context, itemProvider, child) => Stack(
+                child: Consumer<ItemsProvider>(
+                    builder: (context, itemsProvider, child) => Stack(
                       children: [
                         Row(
                           children: [
@@ -65,18 +65,18 @@ class ItemForm extends StatelessWidget {
                                     fontSize: 18
                                 )
                             ),
-                            context.watch<ItemProvider>().quantityController.text == "1"
+                            context.watch<ItemsProvider>().quantityController.text == "1"
                                 ? const Padding(padding: EdgeInsets.all(25))
                                 : IconButton(
                                 icon: const Icon(Icons.remove),
-                                onPressed: itemProvider.decrementQuantity
+                                onPressed: itemsProvider.decrementQuantity
                             ),
                             Text(
-                                context.watch<ItemProvider>().quantityController.text
+                                context.watch<ItemsProvider>().quantityController.text
                             ),
                             IconButton(
                                 icon: const Icon(Icons.add),
-                                onPressed: itemProvider.incrementQuantity
+                                onPressed: itemsProvider.incrementQuantity
                             )
                           ],
                         )
