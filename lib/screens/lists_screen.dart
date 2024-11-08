@@ -18,6 +18,9 @@ class ListsScreen extends StatelessWidget {
   final TargetPlatform platform;
   final String titleBar = 'Mes listes';
   final GlobalKey addListButtonKey = GlobalKey();
+  final GlobalKey modifyListIconKey = GlobalKey();
+  final GlobalKey consultListIconKey = GlobalKey();
+
   ListsScreen({super.key, required this.platform});
 
   @override
@@ -32,6 +35,18 @@ class ListsScreen extends StatelessWidget {
               "Cliquez ici pour créer une liste.",
               "Add list button",
               addListButtonKey
+          ).build(context),
+          CustomTargetFocus(
+              ContentAlign.bottom,
+              "Cliquez ici pour modifier la liste ou glissez vers la droite pour la supprimer.",
+              "Modify list",
+              modifyListIconKey,
+          ).build(context),
+          CustomTargetFocus(
+            ContentAlign.bottom,
+            "Cliquez ici pour accèder à la liste.",
+            "Consult list",
+            consultListIconKey,
           ).build(context)
         ],
         runtimeType.toString()
@@ -78,6 +93,7 @@ class ListsScreen extends StatelessWidget {
                         title: list.title,
                         subtitle: list.description,
                         leading: IconButton(
+                            key: index == 0 ? modifyListIconKey : null,
                             icon: const Icon(Icons.edit_note),
                             onPressed: () {
                               Navigator.of(context).push(
@@ -92,7 +108,10 @@ class ListsScreen extends StatelessWidget {
                               );
                             }
                         ),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                        trailing: Icon(
+                            key: index == 0 ? consultListIconKey : null,
+                            Icons.arrow_forward_ios
+                        ),
                         screen: ListScreen(
                             listId: list.id!,
                             platform: platform,

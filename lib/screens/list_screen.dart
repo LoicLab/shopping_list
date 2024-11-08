@@ -41,20 +41,19 @@ class ListScreen extends StatelessWidget {
         [
           CustomTargetFocus(
               ContentAlign.bottom,
-              "Cliquez ici pour ajouter un article à votre liste.",
+              "Cliquez ici pour ajouter un article à la liste.",
               "Add item button",
               addItemButtonKey
           ).build(context),
           CustomTargetFocus(
               ContentAlign.bottom,
-              "Cliquez ici pour vider la liste des articles.",
+              "Cliquez ici pour vider la liste.",
               "Delete items button",
               deleteItemsButtonKey
           ).build(context)
         ],
         runtimeType.toString()
     );
-
     final itemsProvider = Provider.of<ItemsProvider>(context, listen: false);
 
     return CustomScaffold(

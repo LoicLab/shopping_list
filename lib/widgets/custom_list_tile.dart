@@ -20,7 +20,13 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(title),
-      subtitle: (subtitle != null)?Text(subtitle!,style: const TextStyle(fontSize: 12),maxLines: 1):null,
+      subtitle: (subtitle != null) ?
+        Text(
+            subtitle!,
+            style: const TextStyle(fontSize: 12),
+            maxLines: null,
+            overflow: TextOverflow.visible,
+        ) : null,
       leading: leading,
       trailing: trailing,
       onTap: () => onTap(context),

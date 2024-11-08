@@ -67,6 +67,13 @@ abstract class DatabaseClient {
     FOREIGN KEY (item_id) REFERENCES item (id)
     )
     ''');
+
+    //Add a list for the tutorial
+    await database.insert('list', {
+      'title': 'Exemple de liste',
+      'description': 'Cette liste sert d’exemple pour le tutoriel afin de vous montrer comment utiliser les fonctionnalités de l’application.',
+      'creation_date': DateTime.now().toUtc().toIso8601String()
+    });
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
