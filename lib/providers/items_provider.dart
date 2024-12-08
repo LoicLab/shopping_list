@@ -51,6 +51,7 @@ class ItemsProvider with ChangeNotifier {
   ///Get items by list id
   Future<void> getItemsByListId({required int listId}) async {
     List<Item> newItems = await ListRepository().getItemsByListId(listId: listId);
+    _sortItemsByStatus(newItems);
     //For add new item or items list is empty, refresh the list
     if(newItems.length > _items.length || newItems.isEmpty){
       _filteredItems = newItems;

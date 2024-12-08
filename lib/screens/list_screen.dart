@@ -75,6 +75,8 @@ class ListScreen extends StatelessWidget {
                               actions: <Widget> [
                                 ElevatedButton(
                                     onPressed: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
+                                      itemsProvider.resetSearch();
                                       itemsProvider.emptyList(listId: listId);
                                       Navigator.of(context).pop();
                                     },
